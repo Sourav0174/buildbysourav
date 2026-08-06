@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id                    String   @id @default(cuid())
+  slug                  String   @unique
+  title                 String
+  tagline               String
+  overview              String   @db.Text 
+  whyItExists           String   @db.Text
+  
+  color                 String   @default("#000000")
+  status                String   @default("LIVE")
+  timeline              String   @default("")
+  
+  tech                  Json     @default("[]") // Array of strings
+  features              Json     @default("[]") // Array of strings
+  roadmap               Json     @default("[]") // Array of strings
+  engineeringChallenges Json     @default("[]") // Array of { title, description }
+  engineeringDecisions  Json     @default("[]") // Array of { title, description, tradeoff }
+  metrics               Json     @default("[]") // Array of { label, value }
+  links                 Json     @default("[]") // Array of { label, url }
+  screenshots           Json     @default("[]") // Array of { url, caption }
+  seo                   Json     @default("{}") // Object { title, description, keywords }
+  
+  isFeatured            Boolean  @default(false)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Lab {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  url         String
+  category    String   
+  createdAt   DateTime @default(now())
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String   @db.Text
+  content     String   @db.Text
+  isPublished Boolean  @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  content   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id           String   @id @default(cuid()) // We will only ever have one row
+  siteName     String   @default("The Workspace")
+  siteDesc     String   @default("A premium software engineering portfolio.")
+  resumeUrl    String?
+  githubUrl    String?
+  twitterUrl   String?
+  linkedinUrl  String?
+  updatedAt    DateTime @updatedAt
+}
