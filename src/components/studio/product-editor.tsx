@@ -79,6 +79,20 @@ function StringArrayEditor({ list, onUpdate }: { list: string[], onUpdate: (newL
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
 
+  if (!Array.isArray(list)) {
+    return (
+      <div className="p-4 border border-yellow-500/20 bg-yellow-500/10 rounded-lg text-yellow-500/80 text-sm flex flex-col gap-3 items-start">
+        <div className="flex items-center gap-2">
+          <AlertCircle className="h-4 w-4" />
+          <span>Legacy or malformed data detected. Expected an array of strings.</span>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => onUpdate([])} className="border-yellow-500/20 text-yellow-500/80 hover:bg-yellow-500/20">
+          Reset to Empty Array
+        </Button>
+      </div>
+    )
+  }
+
   // Map to objects with unique IDs for dnd-kit
   const items = React.useMemo(() => list.map((val, i) => ({ id: `${i}-${val}`, val })), [list])
 
@@ -170,6 +184,20 @@ function ObjectArrayEditor({ list, keys, onUpdate }: { list: any[], keys: any[],
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
+
+  if (!Array.isArray(list)) {
+    return (
+      <div className="p-4 border border-yellow-500/20 bg-yellow-500/10 rounded-lg text-yellow-500/80 text-sm flex flex-col gap-3 items-start">
+        <div className="flex items-center gap-2">
+          <AlertCircle className="h-4 w-4" />
+          <span>Legacy or malformed data detected. Expected an array of objects.</span>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => onUpdate([])} className="border-yellow-500/20 text-yellow-500/80 hover:bg-yellow-500/20">
+          Reset to Empty Array
+        </Button>
+      </div>
+    )
+  }
 
   // Needs a stable ID. Fallback to index if no unique ID property exists.
   const items = React.useMemo(() => list.map((val, i) => ({ id: val._id || `${i}-${JSON.stringify(val).slice(0, 10)}`, val })), [list])

@@ -33,6 +33,17 @@ interface EngineeringDecision {
   tradeoff: string
 }
 
+function safeParseJSON(val: unknown, fallback: any) {
+  if (typeof val === 'string') {
+    try {
+      return JSON.parse(val)
+    } catch {
+      return fallback
+    }
+  }
+  return val ?? fallback
+}
+
 export const revalidate = 60 // Revalidate cache every 60 seconds
 
 // Ensure static generation for known products
@@ -55,14 +66,16 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     notFound()
   }
 
-  // Safely parse JSON fields
+  // Safely parse JSON fields and guarantee fallback shapes
   const product = {
     ...dbProduct,
-    tech: typeof dbProduct.tech === 'string' ? JSON.parse(dbProduct.tech) : dbProduct.tech || [],
-    links: typeof dbProduct.links === 'string' ? JSON.parse(dbProduct.links) : dbProduct.links || [],
-    engineeringChallenges: typeof dbProduct.engineeringChallenges === 'string' ? JSON.parse(dbProduct.engineeringChallenges) : dbProduct.engineeringChallenges || [],
-    engineeringDecisions: typeof dbProduct.engineeringDecisions === 'string' ? JSON.parse(dbProduct.engineeringDecisions) : dbProduct.engineeringDecisions || [],
-    metrics: typeof dbProduct.metrics === 'string' ? JSON.parse(dbProduct.metrics) : dbProduct.metrics || [],
+    tech: safeParseJSON(dbProduct.tech, []),
+    links: safeParseJSON(dbProduct.links, []),
+    engineeringChallenges: safeParseJSON(dbProduct.engineeringChallenges, []),
+    engineeringDecisions: safeParseJSON(dbProduct.engineeringDecisions, []),
+    metrics: safeParseJSON(dbProduct.metrics, []),
+    screenshots: safeParseJSON(dbProduct.screenshots, []),
+    seo: safeParseJSON(dbProduct.seo, {}),
   }
 
   return (
@@ -94,7 +107,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </P>
           
           <div className="flex flex-wrap items-center gap-4 mt-12">
-            {product.links.map((link: ProductLink) => (
+            {Array.isArray(product.links) && product.links.map((link: ProductLink) => (
               <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer">
                 <Button variant={link.label.includes("Live") ? "default" : "outline"} className="gap-2 h-12 px-6">
                   {link.label}
@@ -155,7 +168,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <P className="text-lg text-white/70 leading-relaxed">{product.whyItExists}</P>
             </section>
 
-            {product.engineeringChallenges?.length > 0 && (
+            {Array.isArray(product.engineeringChallenges) && product.engineeringChallenges.length > 0 && (
               <section>
                 <H2 className="text-3xl mb-8">Engineering Challenges</H2>
                 <div className="space-y-12">
@@ -176,7 +189,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div className="p-8 rounded-2xl border border-white/10 bg-white/[0.02]">
               <H3 className="text-lg font-semibold mb-6 text-white/40 uppercase tracking-widest">Core Stack</H3>
               <div className="flex flex-wrap gap-2">
-                {(product.tech || []).map((t: string) => (
+                {Array.isArray(product.tech) && product.tech.map((t: string) => (
                   <Badge key={t} variant="secondary" className="bg-white/5 text-base px-3 py-1.5">
                     {t}
                   </Badge>
@@ -184,7 +197,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               </div>
             </div>
 
-            {product.metrics?.length > 0 && (
+            {Array.isArray(product.metrics) && product.metrics.length > 0 && (
               <div>
                 <H3 className="text-lg font-semibold mb-6 text-white/40 uppercase tracking-widest">Performance</H3>
                 <div className="flex flex-col gap-8">
@@ -208,7 +221,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           
           <ArchitecturePlaceholder className="aspect-video" />
           
-          {product.engineeringDecisions?.length > 0 && (
+          {Array.isArray(product.engineeringDecisions) && product.engineeringDecisions.length > 0 && (
             <div className="grid md:grid-cols-2 gap-12 mt-20">
               {product.engineeringDecisions.map((decision: EngineeringDecision) => (
                 <div key={decision.title}>

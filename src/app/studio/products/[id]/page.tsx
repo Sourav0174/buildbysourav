@@ -5,6 +5,17 @@ import { ArrowLeft } from "lucide-react"
 import { prisma } from "@/core/db/prisma"
 import { ProductEditor } from "@/components/studio/product-editor"
 
+function safeParseJSON(val: unknown, fallback: any) {
+  if (typeof val === 'string') {
+    try {
+      return JSON.parse(val)
+    } catch {
+      return fallback
+    }
+  }
+  return val ?? fallback
+}
+
 export default async function StudioProductEditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const product = await prisma.product.findUnique({
@@ -15,16 +26,18 @@ export default async function StudioProductEditPage({ params }: { params: Promis
     notFound()
   }
 
-  // Ensure JSON fields are passed as objects/arrays, not just stringified strings
+  // Safely parse JSON fields and guarantee fallback shapes
   const initialData = {
     ...product,
-    tech: typeof product.tech === 'string' ? JSON.parse(product.tech) : product.tech,
-    features: typeof product.features === 'string' ? JSON.parse(product.features) : product.features,
-    roadmap: typeof product.roadmap === 'string' ? JSON.parse(product.roadmap) : product.roadmap,
-    engineeringChallenges: typeof product.engineeringChallenges === 'string' ? JSON.parse(product.engineeringChallenges) : product.engineeringChallenges,
-    engineeringDecisions: typeof product.engineeringDecisions === 'string' ? JSON.parse(product.engineeringDecisions) : product.engineeringDecisions,
-    metrics: typeof product.metrics === 'string' ? JSON.parse(product.metrics) : product.metrics,
-    links: typeof product.links === 'string' ? JSON.parse(product.links) : product.links,
+    tech: safeParseJSON(product.tech, []),
+    features: safeParseJSON(product.features, []),
+    roadmap: safeParseJSON(product.roadmap, []),
+    engineeringChallenges: safeParseJSON(product.engineeringChallenges, []),
+    engineeringDecisions: safeParseJSON(product.engineeringDecisions, []),
+    metrics: safeParseJSON(product.metrics, []),
+    links: safeParseJSON(product.links, []),
+    screenshots: safeParseJSON(product.screenshots, []),
+    seo: safeParseJSON(product.seo, {}),
   }
 
   return (

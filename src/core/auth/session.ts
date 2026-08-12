@@ -2,6 +2,9 @@ import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 
+if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) {
+  throw new Error("SESSION_SECRET environment variable is required in production")
+}
 const secretKey = process.env.SESSION_SECRET || 'fallback-secret-key-for-dev'
 const encodedKey = new TextEncoder().encode(secretKey)
 

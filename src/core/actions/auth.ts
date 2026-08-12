@@ -7,6 +7,12 @@ export async function login(formData: FormData) {
   const username = formData.get('username')
   const password = formData.get('password')
 
+  if (process.env.NODE_ENV === 'production') {
+    if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD) {
+      throw new Error("Server Misconfiguration: ADMIN_USERNAME and ADMIN_PASSWORD are required in production")
+    }
+  }
+
   const validUsername = process.env.ADMIN_USERNAME || 'admin'
   const validPassword = process.env.ADMIN_PASSWORD || 'password'
 
