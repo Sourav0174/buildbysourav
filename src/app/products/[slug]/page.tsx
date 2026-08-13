@@ -1,6 +1,7 @@
 import * as React from "react"
 import { notFound } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
 import { H1, H2, H3, P } from "@/components/ui/typography"
@@ -33,7 +34,7 @@ interface EngineeringDecision {
   tradeoff: string
 }
 
-function safeParseJSON(val: unknown, fallback: any) {
+function safeParseJSON(val: unknown, fallback: unknown) {
   if (typeof val === 'string') {
     try {
       return JSON.parse(val)
@@ -124,33 +125,45 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             className="absolute -inset-20 blur-3xl opacity-10 -z-10 rounded-[3rem] pointer-events-none"
             style={{ backgroundColor: product.color || '#ffffff' }}
           />
-          <BrowserMockup className="aspect-video w-full relative overflow-hidden bg-black/40 border-white/10">
-            {/* Abstract Wireframe */}
-            <div className="absolute inset-0 flex flex-col p-4 md:p-8 gap-4 opacity-30">
-              {/* Fake Header */}
-              <div className="h-10 w-full flex items-center justify-between border-b border-white/10 pb-4">
-                <div className="h-4 w-32 bg-white/20 rounded-full" />
-                <div className="flex gap-3">
-                  <div className="h-8 w-8 rounded-full bg-white/10" />
-                  <div className="h-8 w-8 rounded-full bg-white/10" />
-                </div>
-              </div>
-              {/* Fake Content Area */}
-              <div className="flex flex-1 gap-6">
-                <div className="w-1/4 h-full rounded-xl bg-white/5 border border-white/10 p-4 space-y-4 hidden md:block">
-                  <div className="h-3 w-full bg-white/10 rounded-full" />
-                  <div className="h-3 w-3/4 bg-white/10 rounded-full" />
-                  <div className="h-3 w-5/6 bg-white/10 rounded-full" />
-                  <div className="h-3 w-4/5 bg-white/10 rounded-full" />
-                  <div className="h-3 w-full bg-white/10 rounded-full" />
-                </div>
-                <div className="flex-1 h-full rounded-xl border border-white/10 bg-white/[0.02] p-6 flex flex-col gap-6">
-                   <div className="h-32 w-full rounded-lg bg-gradient-to-r from-white/5 to-transparent border border-white/5" />
-                   <div className="flex-1 w-full rounded-lg bg-white/5 border border-white/5" />
-                </div>
-              </div>
+          {product.heroImage ? (
+            <div className="aspect-video w-full relative overflow-hidden rounded-2xl border border-white/10 bg-black/40">
+              <Image 
+                src={product.heroImage} 
+                alt={`${product.title} interface`}
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
-          </BrowserMockup>
+          ) : (
+            <BrowserMockup className="aspect-video w-full relative overflow-hidden bg-black/40 border-white/10">
+              {/* Abstract Wireframe */}
+              <div className="absolute inset-0 flex flex-col p-4 md:p-8 gap-4 opacity-30">
+                {/* Fake Header */}
+                <div className="h-10 w-full flex items-center justify-between border-b border-white/10 pb-4">
+                  <div className="h-4 w-32 bg-white/20 rounded-full" />
+                  <div className="flex gap-3">
+                    <div className="h-8 w-8 rounded-full bg-white/10" />
+                    <div className="h-8 w-8 rounded-full bg-white/10" />
+                  </div>
+                </div>
+                {/* Fake Content Area */}
+                <div className="flex flex-1 gap-6">
+                  <div className="w-1/4 h-full rounded-xl bg-white/5 border border-white/10 p-4 space-y-4 hidden md:block">
+                    <div className="h-3 w-full bg-white/10 rounded-full" />
+                    <div className="h-3 w-3/4 bg-white/10 rounded-full" />
+                    <div className="h-3 w-5/6 bg-white/10 rounded-full" />
+                    <div className="h-3 w-4/5 bg-white/10 rounded-full" />
+                    <div className="h-3 w-full bg-white/10 rounded-full" />
+                  </div>
+                  <div className="flex-1 h-full rounded-xl border border-white/10 bg-white/[0.02] p-6 flex flex-col gap-6">
+                     <div className="h-32 w-full rounded-lg bg-gradient-to-r from-white/5 to-transparent border border-white/5" />
+                     <div className="flex-1 w-full rounded-lg bg-white/5 border border-white/5" />
+                  </div>
+                </div>
+              </div>
+            </BrowserMockup>
+          )}
         </div>
 
         {/* Narrative & Architecture */}
@@ -236,6 +249,38 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </div>
           )}
         </Section>
+
+        {/* Gallery Section */}
+        {Array.isArray(product.screenshots) && product.screenshots.length > 0 && (
+          <Section className="py-24 border-t border-white/10">
+            <div className="mb-16">
+              <H2 className="text-4xl mb-4">Gallery</H2>
+              <P className="text-white/60 text-lg max-w-xl">Interface and component highlights.</P>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              {product.screenshots.map((screenshot: { url?: string; caption?: string }, index: number) => {
+                if (!screenshot.url || typeof screenshot.url !== 'string') return null;
+                
+                return (
+                  <div key={index} className="flex flex-col gap-4">
+                    <div className="aspect-video relative rounded-xl overflow-hidden border border-white/10 bg-black/40">
+                      <Image 
+                        src={screenshot.url} 
+                        alt={screenshot.caption || `${product.title} screenshot ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    {screenshot.caption && (
+                      <p className="text-sm text-white/50 text-center">{screenshot.caption}</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </Section>
+        )}
         
         {/* Next Steps CTA */}
         <Section className="py-24 border-t border-white/5 text-center">

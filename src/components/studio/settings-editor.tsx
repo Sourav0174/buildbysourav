@@ -29,8 +29,8 @@ export function SettingsEditor({ initialData }: { initialData: SettingsFormData 
       await saveSettings(formData)
       setSuccessMsg("Settings saved successfully.")
       // Update initial data logic handled by Next.js revalidatePath causing a refresh
-    } catch (err: any) {
-      setErrorMsg(err.message || "Failed to save settings. Please check your inputs.")
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Failed to save settings. Please check your inputs.")
     } finally {
       setIsSaving(false)
     }

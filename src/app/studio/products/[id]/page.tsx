@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react"
 import { prisma } from "@/core/db/prisma"
 import { ProductEditor } from "@/components/studio/product-editor"
 
-function safeParseJSON(val: unknown, fallback: any) {
+function safeParseJSON(val: unknown, fallback: unknown) {
   if (typeof val === 'string') {
     try {
       return JSON.parse(val)

@@ -9,6 +9,8 @@ import { cn } from "@/core/utils/cn"
 const navItems = [
   { name: "Products", path: "/products" },
   { name: "Services", path: "/services" },
+  { name: "Labs", path: "/labs" },
+  { name: "Writing", path: "/writing" },
   { name: "About", path: "/about" },
 ]
 

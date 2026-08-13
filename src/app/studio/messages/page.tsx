@@ -2,7 +2,6 @@ import * as React from "react"
 import Link from "next/link"
 import { prisma } from "@/core/db/prisma"
 import { H1, P } from "@/components/ui/typography"
-import { Button } from "@/components/ui/button"
 import { ArrowRight, Mail, MailOpen } from "lucide-react"
 import { cn } from "@/core/utils/cn"
 

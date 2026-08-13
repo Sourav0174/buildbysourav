@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { updateProduct, deleteProduct } from "@/core/actions/products"
+import { upload } from '@vercel/blob/client'
 import { cn } from "@/core/utils/cn"
 
 import {
@@ -79,6 +80,9 @@ function StringArrayEditor({ list, onUpdate }: { list: string[], onUpdate: (newL
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
 
+  // Map to objects with unique IDs for dnd-kit
+  const items = React.useMemo(() => (Array.isArray(list) ? list : []).map((val, i) => ({ id: `${i}-${val}`, val })), [list])
+
   if (!Array.isArray(list)) {
     return (
       <div className="p-4 border border-yellow-500/20 bg-yellow-500/10 rounded-lg text-yellow-500/80 text-sm flex flex-col gap-3 items-start">
@@ -92,9 +96,6 @@ function StringArrayEditor({ list, onUpdate }: { list: string[], onUpdate: (newL
       </div>
     )
   }
-
-  // Map to objects with unique IDs for dnd-kit
-  const items = React.useMemo(() => list.map((val, i) => ({ id: `${i}-${val}`, val })), [list])
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -185,6 +186,9 @@ function ObjectArrayEditor({ list, keys, onUpdate }: { list: any[], keys: any[],
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
 
+  // Needs a stable ID. Fallback to index if no unique ID property exists.
+  const items = React.useMemo(() => (Array.isArray(list) ? list : []).map((val, i) => ({ id: val._id || `${i}-${JSON.stringify(val).slice(0, 10)}`, val })), [list])
+
   if (!Array.isArray(list)) {
     return (
       <div className="p-4 border border-yellow-500/20 bg-yellow-500/10 rounded-lg text-yellow-500/80 text-sm flex flex-col gap-3 items-start">
@@ -198,9 +202,6 @@ function ObjectArrayEditor({ list, keys, onUpdate }: { list: any[], keys: any[],
       </div>
     )
   }
-
-  // Needs a stable ID. Fallback to index if no unique ID property exists.
-  const items = React.useMemo(() => list.map((val, i) => ({ id: val._id || `${i}-${JSON.stringify(val).slice(0, 10)}`, val })), [list])
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -242,6 +243,259 @@ function ObjectArrayEditor({ list, keys, onUpdate }: { list: any[], keys: any[],
       }}>
         <Plus className="h-4 w-4 mr-2" /> Add Entry
       </Button>
+    </div>
+  )
+}
+
+// --- Hero Image Upload Component ---
+function HeroImageUpload({ currentUrl, onUpdate, onRemove }: { currentUrl: string | null, onUpdate: (url: string) => void, onRemove: () => void }) {
+  const [isUploading, setIsUploading] = React.useState(false)
+  const [error, setError] = React.useState<string | null>(null)
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("File must be less than 5MB")
+      return
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif']
+    if (!allowedTypes.includes(file.type)) {
+      setError("Invalid file type. Only JPEG, PNG, WebP, AVIF, and GIF are allowed.")
+      return
+    }
+
+    setIsUploading(true)
+    setError(null)
+    
+    try {
+      const newBlob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
+      })
+      onUpdate(newBlob.url)
+    } catch (err: any) {
+      setError(err.message || "Upload failed")
+    } finally {
+      setIsUploading(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      {error && <div className="text-red-400 text-sm bg-red-400/10 p-3 rounded-lg border border-red-400/20">{error}</div>}
+      
+      {currentUrl ? (
+        <div className="space-y-4">
+          <div className="relative aspect-video w-full max-w-xl rounded-lg overflow-hidden border border-white/10 bg-black/40">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={currentUrl} alt="Hero" className="object-cover w-full h-full" />
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} disabled={isUploading} className="bg-transparent border-white/20">
+              {isUploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+              Replace Image
+            </Button>
+            <Button variant="ghost" size="sm" onClick={onRemove} disabled={isUploading} className="text-red-400 hover:text-red-300 hover:bg-red-400/10">
+              Remove
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col items-start gap-4">
+          <Button variant="outline" onClick={() => fileInputRef.current?.click()} disabled={isUploading} className="bg-white/5 border-white/10 hover:bg-white/10">
+            {isUploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+            Upload Hero Image
+          </Button>
+          <p className="text-xs text-white/40">JPEG, PNG, WebP, or AVIF up to 5MB.</p>
+        </div>
+      )}
+      
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        onChange={handleFileSelect} 
+        accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+        className="hidden" 
+      />
+    </div>
+  )
+}
+
+// --- Gallery Editor Component ---
+function GalleryEditor({ list, onUpdate }: { list: any[], onUpdate: (newList: any[]) => void }) {
+  const [isUploading, setIsUploading] = React.useState(false)
+  const [error, setError] = React.useState<string | null>(null)
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
+
+  // Ensure list is an array
+  const safeList = Array.isArray(list) ? list : []
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("File must be less than 5MB")
+      return
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif']
+    if (!allowedTypes.includes(file.type)) {
+      setError("Invalid file type. Only JPEG, PNG, WebP, AVIF, and GIF are allowed.")
+      return
+    }
+
+    setIsUploading(true)
+    setError(null)
+    
+    try {
+      const newBlob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
+      })
+      onUpdate([...safeList, { url: newBlob.url, caption: "" }])
+    } catch (err: any) {
+      setError(err.message || "Upload failed")
+    } finally {
+      setIsUploading(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
+  }
+
+  const handleRemove = (index: number) => {
+    if (confirm("Are you sure you want to remove this screenshot?")) {
+      const newList = [...safeList]
+      newList.splice(index, 1)
+      onUpdate(newList)
+    }
+  }
+
+  const handleMoveUp = (index: number) => {
+    if (index === 0) return
+    const newList = [...safeList]
+    const temp = newList[index - 1]
+    newList[index - 1] = newList[index]
+    newList[index] = temp
+    onUpdate(newList)
+  }
+
+  const handleMoveDown = (index: number) => {
+    if (index === safeList.length - 1) return
+    const newList = [...safeList]
+    const temp = newList[index + 1]
+    newList[index + 1] = newList[index]
+    newList[index] = temp
+    onUpdate(newList)
+  }
+
+  const handleCaptionChange = (index: number, caption: string) => {
+    const newList = [...safeList]
+    newList[index] = { ...newList[index], caption }
+    onUpdate(newList)
+  }
+
+  if (!Array.isArray(list)) {
+    return (
+      <div className="p-4 border border-yellow-500/20 bg-yellow-500/10 rounded-lg text-yellow-500/80 text-sm flex flex-col gap-3 items-start">
+        <div className="flex items-center gap-2">
+          <AlertCircle className="h-4 w-4" />
+          <span>Legacy or malformed data detected. Expected an array of objects.</span>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => onUpdate([])} className="border-yellow-500/20 text-yellow-500/80 hover:bg-yellow-500/20">
+          Reset to Empty Array
+        </Button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      {error && <div className="text-red-400 text-sm bg-red-400/10 p-3 rounded-lg border border-red-400/20">{error}</div>}
+      
+      <div className="grid gap-6">
+        {safeList.map((item, index) => (
+          <div key={index} className="flex flex-col md:flex-row gap-6 p-4 rounded-xl border border-white/10 bg-[#0a0a0a]">
+            {/* Image Preview */}
+            <div className="relative aspect-video w-full md:w-64 rounded-lg overflow-hidden bg-black/40 border border-white/10 shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={item.url} alt={`Screenshot ${index + 1}`} className="object-cover w-full h-full" />
+            </div>
+            
+            {/* Details and Controls */}
+            <div className="flex flex-col flex-1 gap-4 justify-between">
+              <div>
+                <label className="text-xs font-medium text-white/40 uppercase mb-2 block">Caption (Optional)</label>
+                <Input 
+                  value={item.caption || ""} 
+                  onChange={(e) => handleCaptionChange(index, e.target.value)} 
+                  placeholder="Describe this screenshot..."
+                  className="bg-transparent border-white/10"
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleMoveUp(index)} 
+                    disabled={index === 0}
+                    className="bg-transparent border-white/10 h-8 px-2"
+                  >
+                    Move Up
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleMoveDown(index)} 
+                    disabled={index === safeList.length - 1}
+                    className="bg-transparent border-white/10 h-8 px-2"
+                  >
+                    Move Down
+                  </Button>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => handleRemove(index)}
+                  className="text-red-400 hover:text-red-300 hover:bg-red-400/10 h-8 px-3"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" /> Remove
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="pt-2">
+        <Button 
+          variant="outline" 
+          onClick={() => fileInputRef.current?.click()} 
+          disabled={isUploading} 
+          className="bg-white/5 border-white/10 hover:bg-white/10"
+        >
+          {isUploading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+          Add Screenshot
+        </Button>
+        <p className="text-xs text-white/40 mt-3">JPEG, PNG, WebP, or AVIF up to 5MB.</p>
+        <input 
+          type="file" 
+          ref={fileInputRef} 
+          onChange={handleFileSelect} 
+          accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+          className="hidden" 
+        />
+      </div>
     </div>
   )
 }
@@ -288,6 +542,7 @@ export function ProductEditor({ initialData }: { initialData: any }) {
         engineeringDecisions: data.engineeringDecisions,
         metrics: data.metrics,
         links: data.links,
+        heroImage: data.heroImage,
         screenshots: data.screenshots,
         seo: data.seo,
       })
@@ -410,6 +665,20 @@ export function ProductEditor({ initialData }: { initialData: any }) {
           </div>
         </Section>
 
+        <Section title="Hero Image" defaultOpen>
+          <HeroImageUpload 
+            currentUrl={data.heroImage}
+            onUpdate={(url) => {
+              updateField("heroImage", url)
+            }}
+            onRemove={() => {
+              if (confirm("Are you sure you want to remove the hero image?")) {
+                updateField("heroImage", null)
+              }
+            }}
+          />
+        </Section>
+
         <Section title="Technology Stack">
           <StringArrayEditor list={data.tech || []} onUpdate={newList => updateField("tech", newList)} />
         </Section>
@@ -457,13 +726,9 @@ export function ProductEditor({ initialData }: { initialData: any }) {
         </Section>
 
         <Section title="Screenshots">
-          <ObjectArrayEditor 
+          <GalleryEditor 
             list={data.screenshots || []}
             onUpdate={newList => updateField("screenshots", newList)}
-            keys={[
-              { key: 'url', placeholder: 'Image URL', type: 'input' },
-              { key: 'caption', placeholder: 'Caption (optional)', type: 'input' }
-            ]} 
           />
         </Section>
 

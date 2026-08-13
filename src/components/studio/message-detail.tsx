@@ -5,9 +5,8 @@ import { Trash2, Mail, MailOpen, User, Clock, Loader2, AlertCircle } from "lucid
 import { H1, H3, P } from "@/components/ui/typography"
 import { Button } from "@/components/ui/button"
 import { deleteMessage, toggleMessageReadStatus } from "@/core/actions/messages"
-import { cn } from "@/core/utils/cn"
 
-export function MessageDetail({ message }: { message: any }) {
+export function MessageDetail({ message }: { message: Record<string, unknown> }) {
   const [isRead, setIsRead] = React.useState(message.isRead)
   const [isToggling, setIsToggling] = React.useState(false)
   const [isDeleting, setIsDeleting] = React.useState(false)
@@ -17,9 +16,9 @@ export function MessageDetail({ message }: { message: any }) {
     if (confirm("Are you sure you want to delete this message? This cannot be undone.")) {
       setIsDeleting(true)
       try {
-        await deleteMessage(message.id)
-      } catch (err: any) {
-        setErrorMsg(err.message || "Failed to delete message")
+        await deleteMessage(message.id as string)
+      } catch (err: unknown) {
+        setErrorMsg(err instanceof Error ? err.message : "Failed to delete message")
         setIsDeleting(false)
       }
     }
@@ -29,10 +28,10 @@ export function MessageDetail({ message }: { message: any }) {
     setIsToggling(true)
     setErrorMsg("")
     try {
-      await toggleMessageReadStatus(message.id, !isRead)
+      await toggleMessageReadStatus(message.id as string, !isRead)
       setIsRead(!isRead)
-    } catch (err: any) {
-      setErrorMsg(err.message || "Failed to update status")
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Failed to update status")
     } finally {
       setIsToggling(false)
     }
@@ -93,7 +92,7 @@ export function MessageDetail({ message }: { message: any }) {
             </div>
             <div>
               <div className="text-sm font-medium text-white/40 uppercase tracking-wider mb-1">Sender Name</div>
-              <div className="text-lg font-medium">{message.name || "Unknown"}</div>
+              <div className="text-lg font-medium">{(message.name as string) || "Unknown"}</div>
             </div>
           </div>
           
@@ -103,7 +102,7 @@ export function MessageDetail({ message }: { message: any }) {
             </div>
             <div>
               <div className="text-sm font-medium text-white/40 uppercase tracking-wider mb-1">Email Address</div>
-              <div className="text-lg font-medium">{message.email}</div>
+              <div className="text-lg font-medium">{message.email as string}</div>
             </div>
           </div>
 
@@ -117,7 +116,7 @@ export function MessageDetail({ message }: { message: any }) {
                 {new Intl.DateTimeFormat("en-US", { 
                   dateStyle: "long", 
                   timeStyle: "short" 
-                }).format(new Date(message.createdAt))}
+                }).format(new Date(message.createdAt as string))}
               </div>
             </div>
           </div>
@@ -131,7 +130,7 @@ export function MessageDetail({ message }: { message: any }) {
         </H3>
         <div className="bg-[#0A0A0A] border border-white/5 rounded-xl p-6 md:p-8 min-h-[300px]">
           <P className="whitespace-pre-wrap text-white/80 leading-relaxed font-mono text-sm">
-            {message.content}
+            {message.content as string}
           </P>
         </div>
       </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { ChevronRight, ChevronDown, Trash2, Save, Loader2, ExternalLink, AlertCircle } from "lucide-react"
+import { ChevronRight, ChevronDown, Save, Loader2, ExternalLink, AlertCircle } from "lucide-react"
 import { H1, H3 } from "@/components/ui/typography"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -32,8 +32,16 @@ function Section({ title, defaultOpen = false, children }: { title: string, defa
   )
 }
 
+type LabFormData = {
+  id: string
+  title: string
+  description: string
+  url: string
+  category: string
+}
+
 // --- Editor Component ---
-export function LabEditor({ initialData }: { initialData: any }) {
+export function LabEditor({ initialData }: { initialData: LabFormData }) {
   const [isSaving, setIsSaving] = React.useState(false)
   const [data, setData] = React.useState(initialData)
   
@@ -72,8 +80,8 @@ export function LabEditor({ initialData }: { initialData: any }) {
     }
   }
 
-  const updateField = (field: string, value: any) => {
-    setData((prev: any) => ({ ...prev, [field]: value }))
+  const updateField = (field: string, value: string) => {
+    setData((prev) => ({ ...prev, [field]: value }))
   }
 
   return (

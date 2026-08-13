@@ -20,6 +20,7 @@ export interface FeaturedProduct {
   status: string;
   description: string;
   slug: string;
+  heroImage?: string | null;
 }
 
 export function HomeClient({ products }: { products: FeaturedProduct[] }) {
@@ -223,28 +224,40 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
 
                 {/* Product Mockup */}
                 <div className="flex-[1.5] w-full">
-                  <BrowserMockup className="aspect-video w-full group relative overflow-hidden bg-black/40 border-white/10">
-                    <div className="absolute inset-0 flex flex-col p-4 gap-4 opacity-30 group-hover:opacity-50 transition-opacity duration-500">
-                      <div className="h-8 w-full flex items-center justify-between border-b border-white/10 pb-4">
-                        <div className="h-3 w-24 bg-white/20 rounded-full" />
-                        <div className="flex gap-2">
-                          <div className="h-6 w-6 rounded-full bg-white/10" />
-                          <div className="h-6 w-6 rounded-full bg-white/10" />
-                        </div>
-                      </div>
-                      <div className="flex flex-1 gap-4">
-                        <div className="w-1/4 h-full rounded-lg bg-white/5 border border-white/10 p-3 space-y-3 hidden sm:block">
-                          <div className="h-2 w-full bg-white/10 rounded-full" />
-                          <div className="h-2 w-3/4 bg-white/10 rounded-full" />
-                          <div className="h-2 w-5/6 bg-white/10 rounded-full" />
-                        </div>
-                        <div className="flex-1 h-full rounded-lg border border-white/10 bg-white/[0.02] p-4 flex flex-col gap-4">
-                           <div className="h-20 w-full rounded-md bg-gradient-to-r from-white/5 to-transparent border border-white/5" />
-                           <div className="flex-1 w-full rounded-md bg-white/5" />
-                        </div>
-                      </div>
+                  {product.heroImage ? (
+                    <div className="aspect-video w-full relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 group">
+                      <Image 
+                        src={product.heroImage} 
+                        alt={`${product.title} interface`}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        sizes="(max-width: 1024px) 100vw, 60vw"
+                      />
                     </div>
-                  </BrowserMockup>
+                  ) : (
+                    <BrowserMockup className="aspect-video w-full group relative overflow-hidden bg-black/40 border-white/10">
+                      <div className="absolute inset-0 flex flex-col p-4 gap-4 opacity-30 group-hover:opacity-50 transition-opacity duration-500">
+                        <div className="h-8 w-full flex items-center justify-between border-b border-white/10 pb-4">
+                          <div className="h-3 w-24 bg-white/20 rounded-full" />
+                          <div className="flex gap-2">
+                            <div className="h-6 w-6 rounded-full bg-white/10" />
+                            <div className="h-6 w-6 rounded-full bg-white/10" />
+                          </div>
+                        </div>
+                        <div className="flex flex-1 gap-4">
+                          <div className="w-1/4 h-full rounded-lg bg-white/5 border border-white/10 p-3 space-y-3 hidden sm:block">
+                            <div className="h-2 w-full bg-white/10 rounded-full" />
+                            <div className="h-2 w-3/4 bg-white/10 rounded-full" />
+                            <div className="h-2 w-5/6 bg-white/10 rounded-full" />
+                          </div>
+                          <div className="flex-1 h-full rounded-lg border border-white/10 bg-white/[0.02] p-4 flex flex-col gap-4">
+                             <div className="h-20 w-full rounded-md bg-gradient-to-r from-white/5 to-transparent border border-white/5" />
+                             <div className="flex-1 w-full rounded-md bg-white/5" />
+                          </div>
+                        </div>
+                      </div>
+                    </BrowserMockup>
+                  )}
                 </div>
               </motion.div>
             ))}

@@ -29,6 +29,7 @@ const updateProductSchema = z.object({
   tagline: z.string().optional(),
   overview: z.string().optional(),
   whyItExists: z.string().optional(),
+  heroImage: z.string().nullable().optional(),
   color: z.string().optional(),
   status: z.string().optional(),
   timeline: z.string().optional(),
@@ -73,10 +74,54 @@ export async function updateProduct(id: string, data: unknown) {
     throw new Error("Invalid product data")
   }
 
+  // Fetch the existing product to check if the heroImage changed
+  const existingProduct = await prisma.product.findUnique({
+    where: { id },
+    select: { heroImage: true, screenshots: true }
+  })
+
+  // Update the database
   await prisma.product.update({
     where: { id },
     data: parsed.data
   })
+
+  // Cleanup old images if they were replaced or removed
+  try {
+    const { del } = await import('@vercel/blob')
+    const blobsToDelete: string[] = []
+
+    if (
+      existingProduct?.heroImage && 
+      existingProduct.heroImage !== parsed.data.heroImage &&
+      existingProduct.heroImage.includes('.public.blob.vercel-storage.com')
+    ) {
+      blobsToDelete.push(existingProduct.heroImage)
+    }
+
+    if (existingProduct?.screenshots && Array.isArray(existingProduct.screenshots)) {
+      const oldScreenshotUrls = (existingProduct.screenshots as { url?: string; caption?: string }[])
+        .map((s: { url?: string; caption?: string }) => s.url)
+        .filter((url): url is string => typeof url === 'string' && url.includes('.public.blob.vercel-storage.com'))
+      
+      const newScreenshotUrls = new Set(
+        (parsed.data.screenshots || []).map((s) => s.url)
+      )
+
+      for (const oldUrl of oldScreenshotUrls) {
+        if (!newScreenshotUrls.has(oldUrl)) {
+          blobsToDelete.push(oldUrl)
+        }
+      }
+    }
+
+    if (blobsToDelete.length > 0) {
+      await del(blobsToDelete)
+    }
+  } catch (e) {
+    console.error("Failed to delete orphaned blobs:", e)
+  }
+
   revalidatePath(`/studio/products`)
   revalidatePath(`/studio/products/${id}`)
   revalidatePath(`/products`)
@@ -86,9 +131,58 @@ export async function deleteProduct(id: string) {
   const session = await verifySession()
   if (!session?.isAuth) throw new Error("Unauthorized")
 
+  // Fetch product to get heroImage and screenshots before deletion
+  const product = await prisma.product.findUnique({
+    where: { id },
+    select: { heroImage: true, screenshots: true }
+  })
+
   await prisma.product.delete({
     where: { id }
   })
+
+  // Cleanup old images if the product is deleted
+  try {
+    const { del } = await import('@vercel/blob')
+    const blobsToDelete: string[] = []
+
+    if (product?.heroImage && product.heroImage.includes('.public.blob.vercel-storage.com')) {
+      blobsToDelete.push(product.heroImage)
+    }
+
+    if (product?.screenshots && Array.isArray(product.screenshots)) {
+      const screenshotUrls = (product.screenshots as { url?: string; caption?: string }[])
+        .map((s: { url?: string; caption?: string }) => s.url)
+        .filter((url): url is string => typeof url === 'string' && url.includes('.public.blob.vercel-storage.com'))
+      
+      blobsToDelete.push(...screenshotUrls)
+    }
+
+    if (blobsToDelete.length > 0) {
+      await del(blobsToDelete)
+    }
+  } catch (e) {
+    console.error("Failed to delete orphaned blobs on product delete:", e)
+  }
+
   revalidatePath(`/studio/products`)
   redirect('/studio/products')
+}
+
+import { del } from '@vercel/blob'
+
+export async function deleteProductImage(url: string) {
+  const session = await verifySession()
+  if (!session?.isAuth) throw new Error("Unauthorized")
+
+  // Only delete if it belongs to our vercel blob storage
+  if (url.includes('.public.blob.vercel-storage.com')) {
+    try {
+      await del(url)
+    } catch (e) {
+      console.error("Failed to delete blob:", e)
+      // We don't want to throw and break the UI just because cleanup failed,
+      // but we log it.
+    }
+  }
 }

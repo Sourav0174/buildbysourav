@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { ChevronRight, ChevronDown, Trash2, Save, Loader2, ExternalLink, AlertCircle, Globe, Lock } from "lucide-react"
+import { Save, Lock, Globe, ExternalLink, Loader2, AlertCircle, ChevronDown, ChevronRight } from "lucide-react"
 import { H1, H3 } from "@/components/ui/typography"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -32,11 +32,21 @@ function Section({ title, defaultOpen = false, children }: { title: string, defa
   )
 }
 
+type PostFormData = {
+  id: string
+  title: string
+  slug: string
+  excerpt: string
+  content: string
+  isPublished: boolean
+}
+
 // --- Editor Component ---
-export function PostEditor({ initialData }: { initialData: any }) {
+export function PostEditor({ initialData }: { initialData: PostFormData }) {
   const [isSaving, setIsSaving] = React.useState(false)
   const [isPublishing, setIsPublishing] = React.useState(false)
   const [data, setData] = React.useState(initialData)
+  const [savedData, setSavedData] = React.useState(initialData)
   const [errorMsg, setErrorMsg] = React.useState("")
   
   // Track if there are unsaved changes
@@ -46,10 +56,10 @@ export function PostEditor({ initialData }: { initialData: any }) {
     excerpt: data.excerpt,
     content: data.content
   }) !== JSON.stringify({
-    title: initialData.title,
-    slug: initialData.slug,
-    excerpt: initialData.excerpt,
-    content: initialData.content
+    title: savedData.title,
+    slug: savedData.slug,
+    excerpt: savedData.excerpt,
+    content: savedData.content
   })
 
   // Unsaved changes browser warning
@@ -74,14 +84,16 @@ export function PostEditor({ initialData }: { initialData: any }) {
         excerpt: data.excerpt,
         content: data.content,
       })
-      // Update our local initialData representation so isDirty resets
-      initialData.title = data.title
-      initialData.slug = data.slug
-      initialData.excerpt = data.excerpt
-      initialData.content = data.content
-      setData({ ...data }) // Force re-render to clear isDirty
-    } catch (err: any) {
-      setErrorMsg(err.message || "Failed to save post")
+      // Update our local savedData representation so isDirty resets
+      setSavedData((prev) => ({
+        ...prev,
+        title: data.title,
+        slug: data.slug,
+        excerpt: data.excerpt,
+        content: data.content,
+      }))
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Failed to save post")
     } finally {
       setIsSaving(false)
     }
@@ -103,18 +115,18 @@ export function PostEditor({ initialData }: { initialData: any }) {
       setIsPublishing(true)
       try {
         await togglePublishPost(data.id, !data.isPublished)
-        setData((prev: any) => ({ ...prev, isPublished: !prev.isPublished }))
-        initialData.isPublished = !initialData.isPublished
-      } catch (err: any) {
-        setErrorMsg(err.message || `Failed to ${action} post`)
+        setData((prev) => ({ ...prev, isPublished: !prev.isPublished }))
+        setSavedData((prev) => ({ ...prev, isPublished: !prev.isPublished }))
+      } catch (err: unknown) {
+        setErrorMsg(err instanceof Error ? err.message : `Failed to ${action} post`)
       } finally {
         setIsPublishing(false)
       }
     }
   }
 
-  const updateField = (field: string, value: any) => {
-    setData((prev: any) => ({ ...prev, [field]: value }))
+  const updateField = (field: string, value: unknown) => {
+    setData((prev) => ({ ...prev, [field]: value }))
   }
 
   return (

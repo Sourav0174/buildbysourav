@@ -16,7 +16,8 @@ export default async function HomePage() {
     tech: Array.isArray(p.tech) ? p.tech as string[] : [],
     status: p.status,
     description: p.overview,
-    slug: p.slug
+    slug: p.slug,
+    heroImage: p.heroImage
   }))
 
   return <HomeClient products={featuredProducts} />
