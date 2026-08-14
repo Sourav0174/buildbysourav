@@ -2,11 +2,12 @@ import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 
-if (!process.env.SESSION_SECRET) {
-  throw new Error("Server Misconfiguration: SESSION_SECRET environment variable is required")
+function getSessionSecret() {
+  if (!process.env.SESSION_SECRET) {
+    throw new Error("Server Misconfiguration: SESSION_SECRET environment variable is required")
+  }
+  return new TextEncoder().encode(process.env.SESSION_SECRET)
 }
-const secretKey = process.env.SESSION_SECRET
-const encodedKey = new TextEncoder().encode(secretKey)
 
 type SessionPayload = {
   admin: boolean
@@ -18,12 +19,12 @@ export async function encrypt(payload: SessionPayload) {
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(encodedKey)
+    .sign(getSessionSecret())
 }
 
 export async function decrypt(session: string | undefined = '') {
   try {
-    const { payload } = await jwtVerify(session, encodedKey, {
+    const { payload } = await jwtVerify(session, getSessionSecret(), {
       algorithms: ['HS256'],
     })
     return payload as SessionPayload
