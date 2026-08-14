@@ -7,12 +7,13 @@ export async function login(formData: FormData) {
   const username = formData.get('username')
   const password = formData.get('password')
 
-  if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD) {
+  const env = process.env
+  const validUsername = env['ADMIN_USERNAME']
+  const validPassword = env['ADMIN_PASSWORD']
+
+  if (!validUsername || !validPassword) {
     throw new Error("Server Misconfiguration: ADMIN_USERNAME and ADMIN_PASSWORD are required")
   }
-
-  const validUsername = process.env.ADMIN_USERNAME
-  const validPassword = process.env.ADMIN_PASSWORD
 
   if (username === validUsername && password === validPassword) {
     await createSession()

@@ -3,10 +3,12 @@ import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 
 function getSessionSecret() {
-  if (!process.env.SESSION_SECRET) {
+  const env = process.env
+  const secret = env['SESSION_SECRET']
+  if (!secret) {
     throw new Error("Server Misconfiguration: SESSION_SECRET environment variable is required")
   }
-  return new TextEncoder().encode(process.env.SESSION_SECRET)
+  return new TextEncoder().encode(secret)
 }
 
 type SessionPayload = {
