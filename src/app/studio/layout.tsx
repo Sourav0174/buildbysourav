@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button"
 import { 
   LayoutDashboard, 
   Package, 
-  Beaker, 
-  PenTool, 
   MessageSquare, 
   Settings, 
   LogOut 
@@ -15,8 +13,6 @@ import {
 const sidebarLinks = [
   { href: "/studio", label: "Dashboard", icon: LayoutDashboard },
   { href: "/studio/products", label: "Products", icon: Package },
-  { href: "/studio/labs", label: "Labs", icon: Beaker },
-  { href: "/studio/writing", label: "Writing", icon: PenTool },
   { href: "/studio/messages", label: "Messages", icon: MessageSquare },
   { href: "/studio/settings", label: "Settings", icon: Settings },
 ]

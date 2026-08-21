@@ -5,16 +5,14 @@ import { prisma } from "@/core/db/prisma"
 
 export default async function StudioDashboard() {
   // We'll fetch basic counts for the dashboard
-  let stats = { products: 0, labs: 0, posts: 0, messages: 0 }
+  let stats = { products: 0, messages: 0 }
   
   try {
-    const [products, labs, posts, messages] = await Promise.all([
+    const [products, messages] = await Promise.all([
       prisma.product.count(),
-      prisma.lab.count(),
-      prisma.post.count(),
       prisma.message.count({ where: { isRead: false } })
     ])
-    stats = { products, labs, posts, messages }
+    stats = { products, messages }
   } catch (error) {
     console.error("Database connection failed", error)
   }
@@ -30,14 +28,6 @@ export default async function StudioDashboard() {
         <Card className="p-6 bg-white/[0.02] border-white/10">
           <div className="text-sm font-medium text-white/40 mb-2">Products</div>
           <div className="text-4xl font-bold">{stats.products}</div>
-        </Card>
-        <Card className="p-6 bg-white/[0.02] border-white/10">
-          <div className="text-sm font-medium text-white/40 mb-2">Active Labs</div>
-          <div className="text-4xl font-bold">{stats.labs}</div>
-        </Card>
-        <Card className="p-6 bg-white/[0.02] border-white/10">
-          <div className="text-sm font-medium text-white/40 mb-2">Published Posts</div>
-          <div className="text-4xl font-bold">{stats.posts}</div>
         </Card>
         <Card className="p-6 bg-white/[0.02] border-white/10">
           <div className="text-sm font-medium text-white/40 mb-2">Unread Messages</div>
