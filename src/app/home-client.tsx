@@ -107,7 +107,7 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
       </div>
 
       {/* Hero & Credibility */}
-      <div className="min-h-0 lg:min-h-screen flex flex-col justify-center relative z-10 pt-24 lg:pt-32 pb-10 lg:pb-24">
+      <div className="min-h-0 lg:min-h-screen flex flex-col justify-center relative z-10 pt-16 sm:pt-20 lg:pt-32 pb-10 lg:pb-24">
         <Container className="flex flex-col justify-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -138,14 +138,14 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
             </div>
 
             <H1 className="text-3xl md:text-4xl lg:text-[4.5rem] tracking-tight text-white/90 mb-5 lg:mb-8 leading-[1.05] lg:leading-[1.1] font-medium">
-              I architect systems <br className="hidden md:block lg:hidden"/> and build products.
+              Turning ideas into <br className="hidden md:block lg:hidden"/> products that work.
             </H1>
-            <P className="text-lg md:text-2xl text-white/70 lg:text-white/60 max-w-[320px] md:max-w-md lg:max-w-2xl mb-7 lg:mb-12 font-light leading-[1.6] lg:leading-normal mx-auto lg:mx-0">
-              Staff Product Engineer specializing in full-stack development, distributed systems, and premium user experiences. No noise. Just pure engineering.
+            <P className="text-lg md:text-2xl text-white/60 max-w-[320px] md:max-w-md lg:max-w-2xl mb-7 lg:mb-12 font-light leading-[1.6] lg:leading-[1.6] mx-auto lg:mx-0">
+              I&apos;m a full-stack engineer and product builder. I work across the layers that make a product real &mdash; from <span className="text-white/90 font-normal">architecture</span> and <span className="text-white/90 font-normal">APIs</span>, to <span className="text-white/90 font-normal">interfaces</span> and <span className="text-white/90 font-normal">infrastructure</span>.
             </P>
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2 lg:gap-x-6 lg:gap-y-3 text-sm font-medium text-white/50 w-full">
               <span className="flex items-center gap-2 text-white/70">
-                <span className="h-1.5 w-1.5 rounded-full bg-white/70" /> 10+ Products Built
+                <span className="h-1.5 w-1.5 rounded-full bg-white/70" /> Building Products
               </span>
               <span className="flex items-center gap-2">
                 <span className="h-1 w-1 rounded-full bg-white/30 lg:hidden" /> Next.js / Python / Flutter
@@ -351,6 +351,19 @@ function RefinedTerminalCTA() {
               </div>
             </motion.div>
           </div>
+
+          {/* User's Wish: Concluding statement */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+            className="mt-24 text-center"
+          >
+            <p className="text-xs sm:text-sm font-mono tracking-[0.25em] uppercase text-white/20 hover:text-white/40 transition-colors duration-500 cursor-default">
+              Excellent work attracts excellent opportunity.
+            </p>
+          </motion.div>
         </div>
       </Container>
     </Section>

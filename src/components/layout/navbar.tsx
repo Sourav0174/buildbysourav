@@ -33,13 +33,13 @@ export function Navbar() {
     >
       <nav
         className={cn(
-          "flex items-center gap-6 rounded-full border border-white/10 bg-black/50 px-6 py-2.5 backdrop-blur-md shadow-2xl transition-all duration-300",
+          "flex items-center gap-3 sm:gap-6 rounded-full border border-white/10 bg-black/50 px-4 sm:px-6 py-2.5 backdrop-blur-md shadow-2xl transition-all duration-300 max-w-[95vw] overflow-x-auto no-scrollbar",
           scrolled ? "bg-black/80 border-white/20" : ""
         )}
       >
-        <Link href="/" className="mr-4 flex items-center gap-2 relative">
-          <div className="h-4 w-4 rounded-full bg-white animate-pulse" />
-          <span className="font-semibold tracking-tight text-white hidden sm:block">Workspace</span>
+        <Link href="/" className="mr-2 sm:mr-4 flex flex-shrink-0 items-center gap-2 relative">
+          <div className="h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-white animate-pulse" />
+          <span className="font-semibold tracking-tight text-white hidden md:block">Workspace</span>
         </Link>
         
         <div className="flex items-center gap-1 sm:gap-2">
@@ -50,7 +50,7 @@ export function Navbar() {
                 key={item.name}
                 href={item.path}
                 className={cn(
-                  "relative px-3 py-1.5 text-sm font-medium transition-colors hover:text-white",
+                  "relative px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium transition-colors hover:text-white whitespace-nowrap",
                   isActive ? "text-white" : "text-muted-foreground"
                 )}
               >
@@ -67,12 +67,12 @@ export function Navbar() {
           })}
         </div>
 
-        <div className="ml-4 pl-4 border-l border-white/10 hidden sm:block">
+        <div className="ml-2 sm:ml-4 pl-2 sm:pl-4 border-l border-white/10 flex-shrink-0">
           <Link
             href="/build"
-            className="text-sm font-medium text-white transition-colors hover:text-accent"
+            className="text-xs sm:text-sm font-medium text-white transition-colors hover:text-accent whitespace-nowrap"
           >
-            Let&apos;s Build &rarr;
+            Let&apos;s Build <span className="hidden sm:inline">&rarr;</span>
           </Link>
         </div>
       </nav>
