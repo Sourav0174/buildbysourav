@@ -30,6 +30,7 @@ model Product {
   seo                   Json @default("{}") // Object { title, description, keywords }
 
   isFeatured Boolean @default(false)
+  order      Int     @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { BrowserMockup } from "@/components/ui/mockup"
 import { Stats } from "@/components/ui/stats"
-import { ArchitecturePlaceholder } from "@/components/ui/architecture-placeholder"
 import { prisma } from "@/core/db/prisma"
 import { ArrowLeft, ArrowUpRight } from "lucide-react"
 
@@ -26,12 +25,6 @@ interface EngineeringChallenge {
 interface Metric {
   label: string
   value: string
-}
-
-interface EngineeringDecision {
-  title: string
-  description: string
-  tradeoff: string
 }
 
 function safeParseJSON(val: unknown, fallback: unknown) {
@@ -71,9 +64,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const product = {
     ...dbProduct,
     tech: safeParseJSON(dbProduct.tech, []),
+    features: safeParseJSON(dbProduct.features, []),
+    roadmap: safeParseJSON(dbProduct.roadmap, []),
     links: safeParseJSON(dbProduct.links, []),
     engineeringChallenges: safeParseJSON(dbProduct.engineeringChallenges, []),
-    engineeringDecisions: safeParseJSON(dbProduct.engineeringDecisions, []),
     metrics: safeParseJSON(dbProduct.metrics, []),
     screenshots: safeParseJSON(dbProduct.screenshots, []),
     seo: safeParseJSON(dbProduct.seo, {}),
@@ -181,6 +175,38 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <P className="text-lg text-white/70 leading-relaxed">{product.whyItExists}</P>
             </section>
 
+            {Array.isArray(product.features) && product.features.length > 0 && (
+              <section>
+                <H2 className="text-3xl mb-6">Key Features</H2>
+                <ul className="space-y-4">
+                  {product.features.map((feature: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <div className="h-6 w-6 flex items-center justify-center shrink-0 mt-0.5">
+                        <div className="h-2 w-2 rounded-full bg-white/40" />
+                      </div>
+                      <p className="text-lg text-white/80 leading-relaxed">{feature}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {Array.isArray(product.roadmap) && product.roadmap.length > 0 && (
+              <section>
+                <H2 className="text-3xl mb-6">Roadmap</H2>
+                <ul className="space-y-4">
+                  {product.roadmap.map((item: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <div className="h-6 w-6 flex items-center justify-center shrink-0 mt-0.5">
+                        <div className="h-1.5 w-1.5 rounded-full bg-white/20" />
+                      </div>
+                      <p className="text-lg text-white/60 leading-relaxed">{item}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
             {Array.isArray(product.engineeringChallenges) && product.engineeringChallenges.length > 0 && (
               <section>
                 <H2 className="text-3xl mb-8">Engineering Challenges</H2>
@@ -223,32 +249,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
 
-        {/* Architecture Section */}
-        <Section className="py-24 border-t border-white/10">
-          <div className="flex flex-col md:flex-row items-baseline justify-between mb-16">
-            <div>
-              <H2 className="text-4xl mb-4">System Architecture</H2>
-              <P className="text-white/60 text-lg max-w-xl">High-level overview of the data flow and infrastructure orchestration.</P>
-            </div>
-          </div>
-          
-          <ArchitecturePlaceholder className="aspect-video" />
-          
-          {Array.isArray(product.engineeringDecisions) && product.engineeringDecisions.length > 0 && (
-            <div className="grid md:grid-cols-2 gap-12 mt-20">
-              {product.engineeringDecisions.map((decision: EngineeringDecision) => (
-                <div key={decision.title}>
-                  <H3 className="text-2xl mb-4">{decision.title}</H3>
-                  <P className="text-white/70 mb-4">{decision.description}</P>
-                  <div className="p-4 rounded-lg bg-[#f59e0b]/10 border border-[#f59e0b]/20">
-                    <span className="text-xs font-semibold text-[#f59e0b] uppercase tracking-wider mb-1 block">Tradeoff</span>
-                    <span className="text-sm text-[#f59e0b]/80">{decision.tradeoff}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </Section>
+
 
         {/* Gallery Section */}
         {Array.isArray(product.screenshots) && product.screenshots.length > 0 && (

@@ -186,3 +186,26 @@ export async function deleteProductImage(url: string) {
     }
   }
 }
+
+export async function reorderProducts(orderedIds: string[]) {
+  const session = await verifySession()
+  if (!session?.isAuth) throw new Error("Unauthorized")
+
+  if (!Array.isArray(orderedIds)) {
+    throw new Error("Invalid input")
+  }
+
+  // Use a transaction to perform all updates atomically
+  await prisma.$transaction(
+    orderedIds.map((id, index) =>
+      prisma.product.update({
+        where: { id },
+        data: { order: index },
+      })
+    )
+  )
+
+  revalidatePath(`/studio/products`)
+  revalidatePath(`/products`)
+  revalidatePath(`/`)
+}

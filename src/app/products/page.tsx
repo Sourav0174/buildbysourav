@@ -7,7 +7,10 @@ export const revalidate = 60 // ISR: Revalidate cache every 60 seconds
 
 export default async function ProductsOverview() {
   const dbProducts = await prisma.product.findMany({
-    orderBy: { createdAt: 'desc' }
+    orderBy: [
+      { order: 'asc' },
+      { createdAt: 'desc' }
+    ]
   })
 
   // Parse JSON fields safely for display

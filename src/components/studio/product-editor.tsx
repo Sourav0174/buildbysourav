@@ -503,10 +503,11 @@ function GalleryEditor({ list, onUpdate }: { list: any[], onUpdate: (newList: an
 // --- Editor Component ---
 export function ProductEditor({ initialData }: { initialData: any }) {
   const [isSaving, setIsSaving] = React.useState(false)
+  const [savedData, setSavedData] = React.useState(initialData)
   const [data, setData] = React.useState(initialData)
   
   // Track if there are unsaved changes
-  const isDirty = JSON.stringify(data) !== JSON.stringify(initialData)
+  const isDirty = JSON.stringify(data) !== JSON.stringify(savedData)
 
   // Unsaved changes browser warning
   React.useEffect(() => {
@@ -546,8 +547,7 @@ export function ProductEditor({ initialData }: { initialData: any }) {
         screenshots: data.screenshots,
         seo: data.seo,
       })
-      // Note: revalidation happens on the server so the page will likely reload or refresh router
-      // But we can update initialData if we wanted to prevent isDirty jumping, but relying on server refresh is fine.
+      setSavedData(data)
     } finally {
       setIsSaving(false)
     }

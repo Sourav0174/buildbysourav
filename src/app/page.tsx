@@ -5,7 +5,10 @@ export default async function HomePage() {
   // Fetch featured products server-side
   const dbProducts = await prisma.product.findMany({
     where: { isFeatured: true },
-    orderBy: { createdAt: 'desc' }
+    orderBy: [
+      { order: 'asc' },
+      { createdAt: 'desc' }
+    ]
   })
 
   // Normalize DB schema to UI expectations without leaking internal fields
