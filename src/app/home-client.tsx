@@ -137,24 +137,24 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
               <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#050505] to-transparent opacity-90 pointer-events-none" />
             </div>
 
-            <H1 className="text-3xl md:text-4xl lg:text-[4.5rem] tracking-tight text-white/90 mb-5 lg:mb-8 leading-[1.05] lg:leading-[1.1] font-medium">
+            <H1 className="text-3xl md:text-4xl lg:text-[4.5rem] tracking-tight text-white mb-5 lg:mb-8 leading-[1.05] lg:leading-[1.1] font-medium">
               Turning ideas into <br className="hidden md:block lg:hidden"/> products that work.
             </H1>
             <P className="text-lg md:text-2xl text-white/60 max-w-[320px] md:max-w-md lg:max-w-2xl mb-7 lg:mb-12 font-light leading-[1.6] lg:leading-[1.6] mx-auto lg:mx-0">
-              I&apos;m a full-stack engineer and product builder. I work across the layers that make a product real &mdash; from <span className="text-white/90 font-normal">architecture</span> and <span className="text-white/90 font-normal">APIs</span>, to <span className="text-white/90 font-normal">interfaces</span> and <span className="text-white/90 font-normal">infrastructure</span>.
+              I&apos;m a full-stack engineer and product builder. I work across the layers that make a product real &mdash; from <span className="text-white/80 font-normal">architecture</span> and <span className="text-white/80 font-normal">APIs</span>, to <span className="text-white/80 font-normal">interfaces</span> and <span className="text-white/80 font-normal">infrastructure</span>.
             </P>
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2 lg:gap-x-6 lg:gap-y-3 text-sm font-medium text-white/50 w-full">
-              <span className="flex items-center gap-2 text-white/70">
-                <span className="h-1.5 w-1.5 rounded-full bg-white/70" /> Building Products
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2 lg:gap-x-6 lg:gap-y-3 text-sm font-medium text-white/40 w-full">
+              <span className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-white/40" /> Building Products
               </span>
               <span className="flex items-center gap-2">
-                <span className="h-1 w-1 rounded-full bg-white/30 lg:hidden" /> Next.js / Python / Flutter
+                <span className="h-1 w-1 rounded-full bg-white/20 lg:hidden" /> Next.js / Python / Flutter
               </span>
               <span className="flex items-center gap-2">
-                <span className="h-1 w-1 rounded-full bg-white/30 lg:hidden" /> AI Integration
+                <span className="h-1 w-1 rounded-full bg-white/20 lg:hidden" /> AI Integration
               </span>
               <span className="flex items-center gap-2">
-                <span className="h-1 w-1 rounded-full bg-white/30 lg:hidden" /> Database Architecture
+                <span className="h-1 w-1 rounded-full bg-white/20 lg:hidden" /> Database Architecture
               </span>
             </div>
           </motion.div>

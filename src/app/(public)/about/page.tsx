@@ -46,6 +46,8 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen relative pt-32 pb-24 overflow-hidden">
       <Spotlight />
+      {/* Background Ambient Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-blue-500/10 blur-[130px] rounded-full pointer-events-none opacity-50" />
       
       <Section className="relative z-10 mb-16">
         <Container>

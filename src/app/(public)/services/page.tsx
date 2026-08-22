@@ -16,7 +16,8 @@ const services = [
     who: "Founders needing a robust MVP or scaling companies modernizing their stack.",
     deliverables: ["Database Schema", "API Layer", "Web Application", "Authentication", "Payment Integration"],
     tech: ["Next.js", "React", "PostgreSQL", "Prisma", "Tailwind CSS"],
-    products: ["PaperTrade"]
+    products: ["PaperTrade"],
+    color: "#ffffff"
   },
   {
     title: "Mobile Applications",
@@ -24,7 +25,8 @@ const services = [
     who: "Companies extending their web product to mobile or mobile-first startups.",
     deliverables: ["iOS App", "Android App", "Offline Sync", "Push Notifications"],
     tech: ["Flutter", "Dart", "SQLite", "Firebase"],
-    products: ["MotionX"]
+    products: ["MotionX"],
+    color: "#ffffff"
   },
   {
     title: "Backend Systems",
@@ -32,7 +34,8 @@ const services = [
     who: "Companies with data-heavy applications, high concurrency requirements, or complex business logic.",
     deliverables: ["REST/GraphQL APIs", "Microservices", "Database Optimization", "Message Queues"],
     tech: ["FastAPI", "Python", "Node.js", "PostgreSQL", "Redis"],
-    products: ["PaperTrade", "APISense"]
+    products: ["PaperTrade", "APISense"],
+    color: "#ffffff"
   },
   {
     title: "AI Features & LLM Integration",
@@ -40,7 +43,8 @@ const services = [
     who: "Startups adding AI features or enterprises automating internal workflows.",
     deliverables: ["RAG Pipelines", "Agentic Workflows", "Vector Databases", "Prompt Engineering"],
     tech: ["OpenAI", "LangChain", "Pinecone", "Python"],
-    products: ["MotionX"]
+    products: ["MotionX"],
+    color: "#ffffff"
   },
   {
     title: "Admin Dashboards & Internal Tools",
@@ -48,7 +52,8 @@ const services = [
     who: "Operations teams outgrowing spreadsheets or needing custom workflows.",
     deliverables: ["Admin Dashboard", "Data Visualization", "Role-based Access Control", "CRUD Interfaces"],
     tech: ["Next.js", "React", "Recharts", "Tailwind CSS"],
-    products: ["Workspace Studio"]
+    products: ["Workspace Studio"],
+    color: "#ffffff"
   },
   {
     title: "API Design & Integrations",
@@ -56,7 +61,8 @@ const services = [
     who: "B2B SaaS companies or platforms needing robust public APIs.",
     deliverables: ["API Documentation", "SDKs", "Webhooks", "Third-party Integrations"],
     tech: ["OpenAPI", "FastAPI", "TypeScript"],
-    products: ["APISense"]
+    products: ["APISense"],
+    color: "#ffffff"
   },
   {
     title: "Performance & Architecture Consulting",
@@ -64,7 +70,8 @@ const services = [
     who: "Teams facing scaling issues, slow load times, or frequent outages.",
     deliverables: ["Architecture Audit", "Performance Report", "Optimization Roadmap", "Pair Programming"],
     tech: ["System Design", "AWS", "Vercel", "Datadog"],
-    products: ["PaperTrade"]
+    products: ["PaperTrade"],
+    color: "#ffffff"
   }
 ]
 
@@ -72,6 +79,8 @@ export default function ServicesPage() {
   return (
     <main className="min-h-screen relative pt-32 pb-24 overflow-hidden">
       <Spotlight />
+      {/* Background Ambient Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-blue-500/10 blur-[130px] rounded-full pointer-events-none opacity-50" />
       
       <Section className="relative z-10 mb-16">
         <Container>
