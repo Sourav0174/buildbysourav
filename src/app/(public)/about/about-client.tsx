@@ -36,10 +36,13 @@ const stack = [
 
 export function AboutClient({ timeline, settings }: { timeline: Milestone[], settings: Settings }) {
   return (
-    <main className="min-h-screen relative pt-32 pb-24 overflow-hidden">
+    <main className="min-h-screen relative pt-16 pb-24 overflow-hidden">
       <Spotlight />
       {/* Background Ambient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-blue-500/10 blur-[130px] rounded-full pointer-events-none opacity-50" />
+      <div 
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] pointer-events-none opacity-50"
+        style={{ background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.15) 0%, transparent 70%)' }}
+      />
       
       <Section className="relative z-10 mb-16">
         <Container>

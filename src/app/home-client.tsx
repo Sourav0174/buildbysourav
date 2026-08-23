@@ -50,7 +50,10 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
           className="absolute top-[5vh] right-[2vw] w-full h-[85vh] md:h-[90vh] lg:h-[95vh] lg:w-[60vw] 2xl:w-[55vw]"
         >
           {/* Extremely soft radial spotlight behind the head for subtle depth */}
-          <div className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[70%] aspect-square bg-[#ffffff] rounded-full blur-[120px] opacity-[0.05]" />
+          <div 
+            className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[70%] aspect-square opacity-[0.05]" 
+            style={{ background: 'radial-gradient(circle at center, #ffffff 0%, transparent 70%)' }}
+          />
 
           {/* Base Layer: Sharp, monochrome structural portrait */}
           <div 
@@ -198,8 +201,8 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
                 {/* Product Meta */}
                 <div className="flex-1 w-full space-y-8 relative">
                   <div 
-                    className="absolute -inset-20 blur-3xl opacity-[0.15] -z-10 rounded-full pointer-events-none"
-                    style={{ backgroundColor: product.color }}
+                    className="absolute -inset-20 opacity-[0.15] -z-10 pointer-events-none"
+                    style={{ background: `radial-gradient(circle at center, ${product.color} 0%, transparent 70%)` }}
                   />
                   <div className="flex items-center gap-3">
                     <Badge variant="outline" className="bg-black/50 backdrop-blur-md border-white/10 text-white/70">

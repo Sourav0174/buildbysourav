@@ -117,8 +117,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         {/* Mockup Showcase */}
         <div className="mb-32 relative">
           <div 
-            className="absolute -inset-20 blur-3xl opacity-10 -z-10 rounded-[3rem] pointer-events-none"
-            style={{ backgroundColor: product.color || '#ffffff' }}
+            className="absolute -inset-20 opacity-10 -z-10 pointer-events-none"
+            style={{ background: `radial-gradient(circle at center, ${product.color} 0%, transparent 70%)` }}
           />
           {product.heroImage ? (
             <div className="aspect-video w-full relative overflow-hidden rounded-2xl border border-white/10 bg-black/40">

@@ -77,29 +77,27 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <main className="min-h-screen relative pt-32 pb-24 overflow-hidden">
+    <main className="min-h-screen relative pt-16 pb-24 overflow-hidden">
       <Spotlight />
       {/* Background Ambient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-blue-500/10 blur-[130px] rounded-full pointer-events-none opacity-50" />
+      <div 
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] pointer-events-none opacity-50"
+        style={{ background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.15) 0%, transparent 70%)' }}
+      />
       
-      <Section className="relative z-10 mb-16">
+      <Section className="relative z-10">
         <Container>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-3xl"
+            className="max-w-3xl mb-20"
           >
             <H1 className="text-5xl md:text-6xl tracking-tight mb-6">Services</H1>
             <P className="text-xl md:text-2xl text-white/70">
               I partner with founders and technical teams to architect systems, build scalable products, and solve complex engineering challenges.
             </P>
           </motion.div>
-        </Container>
-      </Section>
-
-      <Section className="relative z-10">
-        <Container>
           <div className="flex flex-col gap-12">
             {services.map((service, index) => (
               <motion.div

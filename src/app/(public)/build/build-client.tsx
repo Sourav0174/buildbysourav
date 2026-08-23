@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
@@ -72,18 +73,29 @@ export function BuildClient({ faqs }: { faqs: Faq[] }) {
   }
 
   return (
-    <main className="min-h-screen relative pt-32 pb-24 overflow-hidden">
+    <main className="min-h-screen relative pt-16 pb-24 overflow-hidden">
       <Spotlight />
       {/* Background Ambient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-blue-500/10 blur-[130px] rounded-full pointer-events-none opacity-50" />
+      <div 
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] pointer-events-none opacity-50"
+        style={{ background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.15) 0%, transparent 70%)' }}
+      />
       
       <Section className="relative z-10">
         <Container>
-          <div className="max-w-3xl mb-20">
-            <H1 className="text-5xl md:text-6xl tracking-tight mb-6">Let&apos;s Build</H1>
-            <P className="text-lg text-white/70 mb-10">
-              I partner with ambitious companies to build scalable products and solve complex engineering challenges. Tell me what you&apos;re working on.
-            </P>
+          <div className="max-w-3xl mb-16">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
+              <H1 className="text-5xl md:text-6xl tracking-tight">Let&apos;s Build</H1>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-10 p-6 rounded-2xl border border-white/10 bg-white/[0.02]">
+              <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border border-white/20 shrink-0 bg-[#050505]">
+                <Image src="/profile2.png" alt="Profile" fill className="object-contain object-bottom grayscale opacity-90 contrast-[1.2]" sizes="80px" />
+              </div>
+              <P className="text-lg text-white/70 max-w-xl !m-0">
+                Have an idea, a product, or a problem worth solving? Tell me what you&apos;re building below. I&apos;ll personally review it and get back to you with the next step.
+              </P>
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
@@ -120,7 +132,6 @@ export function BuildClient({ faqs }: { faqs: Faq[] }) {
 
             </div>
 
-            {/* Right: Form */}
             <div>
               <div className="sticky top-32 p-8 md:p-12 rounded-2xl border border-white/10 bg-black/50 backdrop-blur-xl">
                 <H3 className="text-2xl font-bold mb-2">Project Inquiry</H3>
@@ -168,12 +179,9 @@ export function BuildClient({ faqs }: { faqs: Faq[] }) {
                         defaultValue=""
                       />
                     </div>
-                    <Button 
-                      type="submit" 
-                      className="w-full h-12 text-base font-semibold"
-                      disabled={isPending}
-                    >
-                      {isPending ? "Sending..." : "Submit Inquiry"}
+                    <Button type="submit" disabled={isPending} className="w-full h-12 bg-white text-black hover:bg-white/90 font-medium group transition-all">
+                      {isPending ? "Sending..." : "Submit Inquiry"} 
+                      {!isPending && <Send className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
                     </Button>
                   </form>
                 )}

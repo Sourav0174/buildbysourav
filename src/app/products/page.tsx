@@ -20,7 +20,7 @@ export default async function ProductsOverview() {
   }))
 
   return (
-    <main className="min-h-screen pt-32 pb-24">
+    <main className="min-h-screen pt-48 pb-24">
       <Container>
         <ProductGrid initialProducts={products} />
       </Container>
