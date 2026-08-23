@@ -11,6 +11,7 @@ import { BrowserMockup } from "@/components/ui/mockup"
 import { Stats } from "@/components/ui/stats"
 import { prisma } from "@/core/db/prisma"
 import { ArrowLeft, ArrowUpRight } from "lucide-react"
+import { RefinedTerminalCTA } from "@/components/layout/refined-terminal-cta"
 
 interface ProductLink {
   label: string
@@ -74,7 +75,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   }
 
   return (
-    <main className="min-h-screen pt-32 pb-24 selection:bg-white/20">
+    <main className="min-h-screen pt-32 selection:bg-white/20">
       <Container>
         {/* Back Navigation */}
         <Link 
@@ -283,26 +284,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </Section>
         )}
         
-        {/* Next Steps CTA */}
-        <Section className="py-24 border-t border-white/5 text-center">
-          <div className="inline-flex items-center justify-center h-16 w-16 rounded-full border border-white/10 bg-white/5 mb-8">
-            <span className="text-2xl">🤝</span>
-          </div>
-          <H2 className="text-4xl md:text-5xl mb-6 tracking-tight">Ready to scale your next idea?</H2>
-          <P className="text-xl text-white/70 mb-10 max-w-2xl mx-auto leading-relaxed">
-            These systems were built from scratch with zero compromises. I can do the same for your team.
-          </P>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" asChild className="h-14 px-8 rounded-full bg-white text-black hover:bg-white/90 shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] transition-all text-lg w-full sm:w-auto">
-              <Link href="/build">Initiate Contact</Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild className="h-14 px-8 rounded-full text-lg w-full sm:w-auto">
-              <Link href="/products">View All Products</Link>
-            </Button>
-          </div>
-        </Section>
-
       </Container>
+      
+      {/* Next Steps CTA */}
+      <RefinedTerminalCTA />
     </main>
   )
 }

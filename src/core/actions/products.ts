@@ -19,7 +19,7 @@ export async function createProduct() {
       whyItExists: '',
     }
   })
-  
+  revalidatePath('/', 'layout')
   redirect(`/studio/products/${product.id}`)
 }
 
@@ -122,9 +122,7 @@ export async function updateProduct(id: string, data: unknown) {
     console.error("Failed to delete orphaned blobs:", e)
   }
 
-  revalidatePath(`/studio/products`)
-  revalidatePath(`/studio/products/${id}`)
-  revalidatePath(`/products`)
+  revalidatePath('/', 'layout')
 }
 
 export async function deleteProduct(id: string) {
@@ -165,7 +163,7 @@ export async function deleteProduct(id: string) {
     console.error("Failed to delete orphaned blobs on product delete:", e)
   }
 
-  revalidatePath(`/studio/products`)
+  revalidatePath('/', 'layout')
   redirect('/studio/products')
 }
 
@@ -205,7 +203,5 @@ export async function reorderProducts(orderedIds: string[]) {
     )
   )
 
-  revalidatePath(`/studio/products`)
-  revalidatePath(`/products`)
-  revalidatePath(`/`)
+  revalidatePath('/', 'layout')
 }
