@@ -57,3 +57,14 @@ model Settings {
   linkedinUrl String?
   updatedAt   DateTime @updatedAt
 }
+
+model Milestone {
+  id          String   @id @default(cuid())
+  year        String
+  title       String
+  description String   @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

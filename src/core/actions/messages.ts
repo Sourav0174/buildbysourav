@@ -37,6 +37,8 @@ export async function createMessage(prevState: unknown, formData: FormData) {
       }
     })
 
+    revalidatePath('/studio', 'layout')
+
     return { success: true, error: null }
   } catch (error) {
     console.error("Failed to create message:", error)
@@ -51,7 +53,7 @@ export async function deleteMessage(id: string) {
   await prisma.message.delete({
     where: { id }
   })
-  revalidatePath(`/studio/messages`)
+  revalidatePath('/studio', 'layout')
   redirect('/studio/messages')
 }
 
@@ -64,6 +66,5 @@ export async function toggleMessageReadStatus(id: string, isRead: boolean) {
     data: { isRead }
   })
   
-  revalidatePath(`/studio/messages`)
-  revalidatePath(`/studio/messages/${id}`)
+  revalidatePath('/studio', 'layout')
 }

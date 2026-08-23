@@ -2,9 +2,13 @@ import * as React from "react"
 import { prisma } from "@/core/db/prisma"
 import { H1, P } from "@/components/ui/typography"
 import { SettingsEditor } from "@/components/studio/settings-editor"
+import { MilestoneManager } from "@/components/studio/milestone-manager"
 
 export default async function StudioSettingsPage() {
   const settings = await prisma.settings.findFirst()
+  const milestones = await prisma.milestone.findMany({
+    orderBy: { order: 'asc' }
+  })
 
   const defaultSettings = {
     siteName: "The Workspace",
@@ -39,6 +43,7 @@ export default async function StudioSettingsPage() {
       </div>
 
       <SettingsEditor initialData={initialData} />
+      <MilestoneManager initialMilestones={milestones} />
     </div>
   )
 }
