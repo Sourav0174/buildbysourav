@@ -3,10 +3,14 @@ import { prisma } from "@/core/db/prisma"
 import { H1, P } from "@/components/ui/typography"
 import { SettingsEditor } from "@/components/studio/settings-editor"
 import { MilestoneManager } from "@/components/studio/milestone-manager"
+import { FaqManager } from "@/components/studio/faq-manager"
 
 export default async function StudioSettingsPage() {
   const settings = await prisma.settings.findFirst()
   const milestones = await prisma.milestone.findMany({
+    orderBy: { order: 'asc' }
+  })
+  const faqs = await prisma.faq.findMany({
     orderBy: { order: 'asc' }
   })
 
@@ -44,6 +48,7 @@ export default async function StudioSettingsPage() {
 
       <SettingsEditor initialData={initialData} />
       <MilestoneManager initialMilestones={milestones} />
+      <FaqManager initialFaqs={faqs} />
     </div>
   )
 }

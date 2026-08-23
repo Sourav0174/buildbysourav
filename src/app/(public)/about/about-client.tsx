@@ -43,22 +43,24 @@ export function AboutClient({ timeline, settings }: { timeline: Milestone[], set
       
       <Section className="relative z-10 mb-16">
         <Container>
+          <div className="max-w-3xl mb-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <H1 className="text-5xl md:text-6xl tracking-tight mb-6">About</H1>
+              <P className="text-lg text-white/70 mb-10">
+                I am a Product Engineer and Systems Architect. I build software that feels inevitable—fast, secure, and meticulously crafted.
+                <br /><br />
+                Over the past decade, I&apos;ve engineered everything from high-frequency trading platforms to beautiful consumer mobile apps. Today, I run an independent software studio partnering with founders to bring ambitious ideas to production.
+              </P>
+            </motion.div>
+          </div>
+
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
             {/* Left Column: Intro & Philosophy */}
             <div className="lg:col-span-7 space-y-16">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                <H1 className="text-5xl md:text-6xl tracking-tight mb-8">About</H1>
-                <P className="text-xl text-white/80 leading-relaxed mb-6">
-                  I am a Product Engineer and Systems Architect. I build software that feels inevitable—fast, secure, and meticulously crafted.
-                </P>
-                <P className="text-lg text-white/60 leading-relaxed">
-                  Over the past decade, I&apos;ve engineered everything from high-frequency trading platforms to beautiful consumer mobile apps. Today, I run an independent software studio partnering with founders to bring ambitious ideas to production.
-                </P>
-              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
