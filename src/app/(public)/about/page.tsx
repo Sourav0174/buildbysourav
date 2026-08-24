@@ -11,12 +11,18 @@ export default async function AboutPage() {
     resumeUrl: settings.resumeUrl,
     githubUrl: settings.githubUrl,
     twitterUrl: settings.twitterUrl,
-    linkedinUrl: settings.linkedinUrl
+    linkedinUrl: settings.linkedinUrl,
+    email: settings.email,
+    phone: settings.phone,
+    techStack: settings.techStack
   } : {
     resumeUrl: null,
     githubUrl: null,
     twitterUrl: null,
-    linkedinUrl: null
+    linkedinUrl: null,
+    email: null,
+    phone: null,
+    techStack: null
   }
 
   // Map to simple objects for the client

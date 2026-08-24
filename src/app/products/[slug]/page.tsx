@@ -83,7 +83,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           className="inline-flex items-center gap-2 text-sm font-medium text-white/40 hover:text-white transition-colors mb-12"
         >
           <ArrowLeft className="h-4 w-4" />
-          Ecosystem
+          Products
         </Link>
 
         {/* Hero */}
@@ -98,7 +98,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
           
           <H1 className="text-5xl md:text-6xl tracking-tight mb-6">{product.title}</H1>
-          <P className="text-xl md:text-2xl text-white/70 max-w-3xl leading-snug">
+          <P className="text-lg text-white/70 max-w-3xl leading-snug">
             {product.tagline}
           </P>
           

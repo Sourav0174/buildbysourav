@@ -148,6 +148,53 @@ export function SettingsEditor({ initialData }: { initialData: SettingsFormData 
             </div>
           </div>
         </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-white/10">
+          <div className="space-y-6">
+            <h3 className="text-lg font-medium border-b border-white/10 pb-2">Contact Info</h3>
+            
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium text-white/80">Email</label>
+              <Input 
+                id="email" 
+                name="email" 
+                type="email"
+                value={formData.email || ""} 
+                onChange={handleChange} 
+                placeholder="hello@example.com"
+                className="bg-white/5 border-white/10 h-10" 
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <label htmlFor="phone" className="text-sm font-medium text-white/80">Phone Number</label>
+              <Input 
+                id="phone" 
+                name="phone" 
+                value={formData.phone || ""} 
+                onChange={handleChange} 
+                placeholder="+1 (555) 000-0000"
+                className="bg-white/5 border-white/10 h-10" 
+              />
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <h3 className="text-lg font-medium border-b border-white/10 pb-2">Tech Stack</h3>
+            <div className="space-y-2">
+              <label htmlFor="techStack" className="text-sm font-medium text-white/80">Stack Configuration (JSON)</label>
+              <Textarea 
+                id="techStack" 
+                name="techStack" 
+                value={formData.techStack || ""} 
+                onChange={handleChange} 
+                placeholder="[{ category: 'Frontend', items: ['React'] }]"
+                className="bg-white/5 border-white/10 min-h-[250px] font-mono text-sm" 
+              />
+              <p className="text-xs text-white/40">Provide a valid JSON array of category/items objects.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

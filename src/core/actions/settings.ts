@@ -12,6 +12,9 @@ const settingsSchema = z.object({
   githubUrl: z.string().url("Must be a valid URL").or(z.literal("")).nullable().optional(),
   twitterUrl: z.string().url("Must be a valid URL").or(z.literal("")).nullable().optional(),
   linkedinUrl: z.string().url("Must be a valid URL").or(z.literal("")).nullable().optional(),
+  email: z.string().email("Must be a valid email").or(z.literal("")).nullable().optional(),
+  phone: z.string().or(z.literal("")).nullable().optional(),
+  techStack: z.string().optional(), // We'll receive a stringified JSON and parse it
 })
 
 export type SettingsFormData = z.infer<typeof settingsSchema>
@@ -30,6 +33,9 @@ export async function saveSettings(data: SettingsFormData) {
     githubUrl: parsed.githubUrl || null,
     twitterUrl: parsed.twitterUrl || null,
     linkedinUrl: parsed.linkedinUrl || null,
+    email: parsed.email || null,
+    phone: parsed.phone || null,
+    techStack: parsed.techStack ? JSON.parse(parsed.techStack) : [],
   }
 
   // Find existing settings row, if any

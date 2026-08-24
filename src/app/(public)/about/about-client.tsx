@@ -9,7 +9,7 @@ import { H1, H2, H3, P } from "@/components/ui/typography"
 import { Spotlight } from "@/components/ui/spotlight"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
-import { Code2, Briefcase, Mail, FileText, ArrowUpRight } from "lucide-react"
+import { Code2, Briefcase, Mail, FileText, ArrowUpRight, Phone } from "lucide-react"
 
 type Milestone = {
   id: string
@@ -24,14 +24,17 @@ type Settings = {
   githubUrl: string | null
   twitterUrl: string | null
   linkedinUrl: string | null
+  email: string | null
+  phone: string | null
+  techStack: any
 }
 
 const stack = [
   { category: "Frontend", items: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion"] },
-  { category: "Backend", items: ["Node.js", "Python", "FastAPI", "Go", "GraphQL"] },
-  { category: "Database", items: ["PostgreSQL", "Redis", "Prisma", "ClickHouse", "MongoDB"] },
-  { category: "Mobile", items: ["Flutter", "Dart", "React Native"] },
-  { category: "Infrastructure", items: ["AWS", "Vercel", "Docker", "Terraform", "GitHub Actions"] },
+  { category: "Backend", items: ["Python", "FastAPI", "Node.js", "REST APIs"] },
+  { category: "Mobile", items: ["Flutter", "Dart"] },
+  { category: "Data", items: ["PostgreSQL", "SQLAlchemy", "Redis"] },
+  { category: "Infrastructure", items: ["AWS", "Docker", "Vercel", "GitHub Actions"] },
 ]
 
 export function AboutClient({ timeline, settings }: { timeline: Milestone[], settings: Settings }) {
@@ -54,9 +57,11 @@ export function AboutClient({ timeline, settings }: { timeline: Milestone[], set
             >
               <H1 className="text-5xl md:text-6xl tracking-tight mb-6">About</H1>
               <P className="text-lg text-white/70 mb-10">
-                I am a Product Engineer and Systems Architect. I build software that feels inevitable—fast, secure, and meticulously crafted.
+                I’m an independent product engineer focused on turning ideas into software that is thoughtful, reliable, and ready for the real world.
                 <br /><br />
-                Over the past decade, I&apos;ve engineered everything from high-frequency trading platforms to beautiful consumer mobile apps. Today, I run an independent software studio partnering with founders to bring ambitious ideas to production.
+                I work across product design, frontend, backend, and infrastructure—moving comfortably from the first screen to the API, database, and deployment behind it. I care about the details users notice and the engineering decisions they never should.
+                <br /><br />
+                Whether it’s building something from scratch, improving an existing product, or solving a technical problem, I prefer to stay close to the whole system. That means understanding why something needs to exist before deciding how it should be built.
               </P>
             </motion.div>
           </div>
@@ -99,13 +104,13 @@ export function AboutClient({ timeline, settings }: { timeline: Milestone[], set
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                <H2 className="text-3xl font-bold mb-6">Technology Stack</H2>
+                <H2 className="text-3xl font-bold mb-6">The Stack</H2>
                 <div className="grid sm:grid-cols-2 gap-6">
-                  {stack.map((group) => (
+                  {((Array.isArray(settings.techStack) && settings.techStack.length > 0) ? settings.techStack : stack).map((group: any) => (
                     <div key={group.category} className="space-y-3">
                       <h4 className="text-sm font-semibold text-white/40 uppercase tracking-wider">{group.category}</h4>
                       <div className="flex flex-wrap gap-2">
-                        {group.items.map(tech => (
+                        {group.items.map((tech: string) => (
                           <Badge key={tech} variant="secondary" className="bg-white/5 text-white/70">
                             {tech}
                           </Badge>
@@ -146,13 +151,36 @@ export function AboutClient({ timeline, settings }: { timeline: Milestone[], set
                   </div>
                   <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
                 </a>
-                <Link href="/build" className="flex items-center justify-between p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors group">
-                  <div className="flex items-center gap-3">
-                    <Mail className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
-                    <span className="font-medium">Contact</span>
-                  </div>
-                  <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
-                </Link>
+                
+                {settings.email && (
+                  <a href={`mailto:${settings.email}`} className="flex items-center justify-between p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <Mail className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
+                      <span className="font-medium">Email</span>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+                  </a>
+                )}
+                
+                {settings.phone && (
+                  <a href={`tel:${settings.phone}`} className="flex items-center justify-between p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <Phone className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
+                      <span className="font-medium">Phone</span>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+                  </a>
+                )}
+
+                {(!settings.email && !settings.phone) && (
+                  <Link href="/build" className="flex items-center justify-between p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors group">
+                    <div className="flex items-center gap-3">
+                      <Mail className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
+                      <span className="font-medium">Contact</span>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+                  </Link>
+                )}
               </motion.div>
 
               <motion.div

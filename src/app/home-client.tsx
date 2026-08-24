@@ -144,7 +144,7 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
             <H1 className="text-3xl md:text-4xl lg:text-[4.5rem] tracking-tight text-white mb-5 lg:mb-8 leading-[1.05] lg:leading-[1.1] font-medium">
               Turning ideas into <br className="hidden md:block lg:hidden"/> products that work.
             </H1>
-            <P className="text-lg md:text-2xl text-white/60 max-w-[320px] md:max-w-md lg:max-w-2xl mb-7 lg:mb-12 font-light leading-[1.6] lg:leading-[1.6] mx-auto lg:mx-0">
+            <P className="text-lg text-white/70 max-w-[450px] sm:max-w-xl mx-auto lg:mx-0 font-medium leading-[1.6]">
               I&apos;m a full-stack engineer and product builder. I work across the layers that make a product real &mdash; from <span className="text-white/80 font-normal">architecture</span> and <span className="text-white/80 font-normal">APIs</span>, to <span className="text-white/80 font-normal">interfaces</span> and <span className="text-white/80 font-normal">infrastructure</span>.
             </P>
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2 lg:gap-x-6 lg:gap-y-3 text-sm font-medium text-white/40 w-full">
@@ -211,7 +211,7 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
                   </div>
                   <div>
                     <H3 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-white/90">{product.title}</H3>
-                    <P className="text-xl text-white/70 font-medium mb-4">{product.tagline}</P>
+                    <P className="text-lg text-white/70 font-medium mb-4">{product.tagline}</P>
                     <P className="text-white/50 text-lg leading-relaxed">{product.description}</P>
                   </div>
                   <div className="flex flex-wrap items-center gap-3">
@@ -222,7 +222,7 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
                     ))}
                   </div>
                   <Button variant="default" asChild className="mt-4 bg-white/10 text-white hover:bg-white/20">
-                    <Link href={`/products/${product.slug}`}>Explore Architecture</Link>
+                    <Link href={`/products/${product.slug}`} prefetch={true}>Explore Architecture</Link>
                   </Button>
                 </div>
 

@@ -38,7 +38,7 @@ export function ProductGrid({ initialProducts }: { initialProducts: Product[] })
   const [search, setSearch] = React.useState<string>("")
 
   const filteredProducts = initialProducts.filter(product => {
-    const matchesFilter = filter === "All" || product.status.replace("_", " ") === filter
+    const matchesFilter = filter === "All" || product.status.replace("_", " ").toLowerCase() === filter.toLowerCase()
     const matchesSearch = product.title.toLowerCase().includes(search.toLowerCase()) || 
                           product.tagline.toLowerCase().includes(search.toLowerCase())
     return matchesFilter && matchesSearch
@@ -55,10 +55,10 @@ export function ProductGrid({ initialProducts }: { initialProducts: Product[] })
       <div className="relative flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 pb-12 border-b border-white/10">
         <div>
           <H1 className="text-4xl md:text-[4.5rem] tracking-tight text-white mb-6 leading-[1.05] font-medium">
-            Ecosystem
+            Products
           </H1>
           <P className="text-xl md:text-2xl text-white/60 max-w-2xl font-light leading-[1.6]">
-            An index of software systems, applications, and frameworks I have architected and built.
+            A collection of products, experiments, and software I’ve designed, built, and shipped.
           </P>
         </div>
         
@@ -112,7 +112,7 @@ export function ProductGrid({ initialProducts }: { initialProducts: Product[] })
         >
           {filteredProducts.map((product) => (
             <motion.div key={product.slug} variants={itemVariants} className="h-full">
-              <Link href={`/products/${product.slug}`} className="block h-full">
+              <Link href={`/products/${product.slug}`} prefetch={true} className="block h-full">
                 <SpotlightCard color={product.color || '#ffffff'}>
                   <div className="flex items-start justify-between mb-10">
                     <Badge variant="outline" className="bg-black/40 text-white/60 border-white/10 backdrop-blur-md uppercase tracking-wider text-[10px] px-3 py-1 font-semibold">
