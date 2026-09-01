@@ -70,7 +70,7 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
               alt=""
               fill
               priority
-              className="object-contain object-[center_85%] opacity-30 md:opacity-40 lg:opacity-40 grayscale contrast-[1.1] brightness-[1]"
+              className="object-contain object-[center_85%] opacity-40 md:opacity-50 lg:opacity-60 grayscale contrast-[1.1] brightness-[1.15]"
               sizes="(max-width: 1024px) 100vw, 60vw"
             />
           </div>
@@ -99,7 +99,7 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
                 alt=""
                 fill
                 priority
-                className="object-contain object-[center_85%] opacity-75 lg:opacity-85 grayscale contrast-[1.2] brightness-[0.9]"
+                className="object-contain object-[center_85%] opacity-85 lg:opacity-95 grayscale contrast-[1.2] brightness-[1.1]"
                 sizes="(max-width: 1024px) 100vw, 60vw"
               />
               
@@ -133,7 +133,7 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
                   alt="Portrait"
                   fill
                   priority
-                  className="object-contain object-bottom opacity-80 grayscale contrast-[1.1] brightness-[1]"
+                  className="object-contain object-bottom opacity-90 grayscale contrast-[1.1] brightness-[1.1]"
                   sizes="330px"
                 />
               </div>
