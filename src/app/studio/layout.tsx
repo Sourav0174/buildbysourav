@@ -7,12 +7,14 @@ import {
   Package, 
   MessageSquare, 
   Settings, 
-  LogOut 
+  LogOut,
+  FileText 
 } from "lucide-react"
 
 const sidebarLinks = [
   { href: "/studio", label: "Dashboard", icon: LayoutDashboard },
   { href: "/studio/products", label: "Products", icon: Package },
+  { href: "/studio/blog", label: "Blog", icon: FileText },
   { href: "/studio/messages", label: "Messages", icon: MessageSquare },
   { href: "/studio/settings", label: "Settings", icon: Settings },
 ]

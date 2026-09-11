@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { motion, useScroll, useTransform, useMotionTemplate, useMotionValue, useSpring } from "framer-motion"
+import { motion, useMotionTemplate, useMotionValue } from "framer-motion"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
 import { H1, H2, H3, P } from "@/components/ui/typography"
@@ -12,6 +12,8 @@ import { Badge } from "@/components/ui/badge"
 import { BrowserMockup } from "@/components/ui/mockup"
 import { cn } from "@/core/utils/cn"
 import { RefinedTerminalCTA } from "@/components/layout/refined-terminal-cta"
+import { BlogCard } from "@/components/blog/blog-card"
+import type { BlogPostListItem } from "@/core/data/blog"
 
 export interface FeaturedProduct {
   title: string;
@@ -24,7 +26,13 @@ export interface FeaturedProduct {
   heroImage?: string | null;
 }
 
-export function HomeClient({ products }: { products: FeaturedProduct[] }) {
+export function HomeClient({
+  products,
+  posts = [],
+}: {
+  products: FeaturedProduct[]
+  posts?: BlogPostListItem[]
+}) {
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
 
@@ -268,6 +276,35 @@ export function HomeClient({ products }: { products: FeaturedProduct[] }) {
           </div>
         </Container>
       </Section>
+ 
+      {/* Latest Writing & Systems Notes */}
+      {posts && posts.length > 0 && (
+        <Section className="relative z-20 py-24 border-t border-white/5">
+          <Container>
+            <div className="flex flex-col md:flex-row items-baseline justify-between mb-16 relative z-10">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70 backdrop-blur-sm mb-4">
+                  <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
+                  <span>Engineering Notes & Insights</span>
+                </div>
+                <H2 className="text-4xl mb-4 text-white/90">Latest Writing</H2>
+                <P className="text-lg text-white/50 max-w-xl">
+                  Architectural teardowns, systems design notes, and practical engineering reflections.
+                </P>
+              </div>
+              <Button variant="outline" asChild className="mt-6 md:mt-0 border-white/10 text-white/70 hover:text-white hover:bg-white/5">
+                <Link href="/blog">Read All Articles &rarr;</Link>
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+              {posts.map((post) => (
+                <BlogCard key={post.id} post={post} />
+              ))}
+            </div>
+          </Container>
+        </Section>
+      )}
 
       {/* Let's Build CTA */}
       <RefinedTerminalCTA />

@@ -15,8 +15,22 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "The Workspace",
+  metadataBase: new URL("https://buildbysourav.in"),
+  title: {
+    default: "The Workspace",
+    template: "%s | The Workspace",
+  },
   description: "Engineering Software at the Highest Level",
+  alternates: {
+    canonical: "https://buildbysourav.in",
+  },
+  openGraph: {
+    title: "The Workspace",
+    description: "Engineering Software at the Highest Level",
+    url: "https://buildbysourav.in",
+    siteName: "The Workspace",
+    type: "website",
+  },
 }
 
 export default function RootLayout({

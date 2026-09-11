@@ -55,13 +55,17 @@ export async function deleteSession() {
 }
 
 export async function verifySession() {
-  const cookieStore = await cookies()
-  const cookie = cookieStore.get('session')?.value
-  const session = await decrypt(cookie)
+  try {
+    const cookieStore = await cookies()
+    const cookie = cookieStore.get('session')?.value
+    const session = await decrypt(cookie)
 
-  if (!session?.admin) {
+    if (!session?.admin) {
+      return null
+    }
+
+    return { isAuth: true }
+  } catch {
     return null
   }
-
-  return { isAuth: true }
 }
