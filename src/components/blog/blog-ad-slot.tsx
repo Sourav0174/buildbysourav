@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import Script from "next/script"
 import { getAdProviderConfig } from "@/core/ads/config"
 import { cn } from "@/core/utils/cn"
 
@@ -40,7 +39,7 @@ export function BlogAdSlot({
         Advertisement
       </span>
 
-      {/* Google AdSense Container */}
+      {/* Google AdSense Manual Unit Container */}
       <GoogleAdSenseContainer
         clientId={config.adsense.clientId}
         slotId={slotId}
@@ -62,8 +61,7 @@ function GoogleAdSenseContainer({
     if (adPushedRef.current) return
     try {
       if (typeof window !== "undefined") {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const win = window as any
+        const win = window as unknown as { adsbygoogle?: unknown[] }
         win.adsbygoogle = win.adsbygoogle || []
         win.adsbygoogle.push({})
         adPushedRef.current = true
@@ -75,24 +73,16 @@ function GoogleAdSenseContainer({
   }, [])
 
   return (
-    <>
-      <Script
-        id="google-adsense-script"
-        strategy="afterInteractive"
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`}
-        crossOrigin="anonymous"
+    <div className="min-h-[100px] flex items-center justify-center overflow-hidden">
+      <ins
+        className="adsbygoogle"
+        style={{ display: "block", width: "100%", textAlign: "center" }}
+        data-ad-client={clientId}
+        {...(slotId ? { "data-ad-slot": slotId } : {})}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
       />
-      <div className="min-h-[100px] flex items-center justify-center overflow-hidden">
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block", width: "100%", textAlign: "center" }}
-          data-ad-client={clientId}
-          {...(slotId ? { "data-ad-slot": slotId } : {})}
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        />
-      </div>
-    </>
+    </div>
   )
 }
 
