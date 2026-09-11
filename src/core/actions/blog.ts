@@ -152,7 +152,7 @@ export async function createPost(input?: unknown) {
       seoDescription: data.seoDescription ?? null,
       ogImage: data.ogImage ?? null,
       canonicalUrl: data.canonicalUrl ?? null,
-      allowAds: data.allowAds ?? true,
+      allowAds: data.allowAds ?? false,
       relatedProduct: data.relatedProduct ?? null,
       relatedService: data.relatedService ?? null,
     }

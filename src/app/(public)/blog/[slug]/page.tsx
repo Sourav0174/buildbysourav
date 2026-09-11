@@ -7,6 +7,7 @@ import { Section } from "@/components/layout/section"
 import { H1, P } from "@/components/ui/typography"
 import { Badge } from "@/components/ui/badge"
 import { BlogCard } from "@/components/blog/blog-card"
+import { BlogAdSlot } from "@/components/blog/blog-ad-slot"
 import { MdxRenderer } from "@/components/blog/mdx-content"
 import { RefinedTerminalCTA } from "@/components/layout/refined-terminal-cta"
 import { getPostBySlug, getRelatedPosts } from "@/core/data/blog"
@@ -239,10 +240,16 @@ export default async function BlogPostPage(props: {
               </div>
             )}
 
+            {/* Top Ad Slot (Placement 1: After Cover / Intro) */}
+            <BlogAdSlot allowAds={post.allowAds} slot="top" />
+
             {/* Article Body via MDX Remote */}
             <div className="prose prose-invert max-w-none">
               <MdxRenderer content={post.content} />
             </div>
+
+            {/* Bottom Ad Slot (Placement 2: Lower article body before tags / conversion cards) */}
+            <BlogAdSlot allowAds={post.allowAds} slot="bottom" />
 
             {/* Tags */}
             {post.tags.length > 0 && (

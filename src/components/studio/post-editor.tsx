@@ -1068,16 +1068,21 @@ export function BlogPostEditor({
             {/* Allow Ads */}
             <div>
               <label className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-2 block">
-                Monetization Slots
+                Monetization
               </label>
-              <label className="flex items-center gap-3 p-2 rounded-lg border border-white/10 bg-black/40 cursor-pointer h-9">
+              <label className="flex items-center gap-3 p-3 rounded-lg border border-white/10 bg-black/40 cursor-pointer hover:border-white/20 transition-colors">
                 <input
                   type="checkbox"
                   checked={data.allowAds}
                   onChange={(e) => updateField("allowAds", e.target.checked)}
-                  className="rounded border-white/20 bg-transparent h-4 w-4 text-white"
+                  className="rounded border-white/20 bg-transparent h-4 w-4 text-white focus:ring-0 focus:ring-offset-0"
                 />
-                <span className="text-xs text-white/80">Allow Ad Placements</span>
+                <div className="space-y-0.5">
+                  <div className="text-xs font-medium text-white/90">Enable advertisements</div>
+                  <div className="text-[11px] text-white/40 leading-normal">
+                    Allow advertising slots to appear inside this article.
+                  </div>
+                </div>
               </label>
             </div>
           </div>

@@ -126,7 +126,7 @@ model Post {
   canonicalUrl    String?
 
   // Monetization & Cross-Links
-  allowAds        Boolean   @default(true)
+  allowAds        Boolean   @default(false)
   relatedProduct  String?
   relatedService  String?
 
