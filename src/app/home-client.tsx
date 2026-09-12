@@ -67,8 +67,8 @@ export function HomeClient({
           <div 
             className="absolute inset-0"
             style={{
-              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%), linear-gradient(to top, transparent 0%, black 30%, black 100%)',
-              maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%), linear-gradient(to top, transparent 0%, black 30%, black 100%)',
+              WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, black 15%, black 85%, rgba(0,0,0,0) 100%), linear-gradient(to top, rgba(0,0,0,0) 0%, black 30%, black 100%)',
+              maskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, black 15%, black 85%, rgba(0,0,0,0) 100%), linear-gradient(to top, rgba(0,0,0,0) 0%, black 30%, black 100%)',
               WebkitMaskComposite: 'source-in',
               maskComposite: 'intersect'
             }}
@@ -88,16 +88,16 @@ export function HomeClient({
         <motion.div 
           className="absolute top-0 left-0 w-full h-[100vh]"
           style={{
-            WebkitMaskImage: useMotionTemplate`radial-gradient(250px circle at ${mouseX}px ${mouseY}px, black 0%, transparent 100%)`,
-            maskImage: useMotionTemplate`radial-gradient(250px circle at ${mouseX}px ${mouseY}px, black 0%, transparent 100%)`
+            WebkitMaskImage: useMotionTemplate`radial-gradient(250px circle at ${mouseX}px ${mouseY}px, black 0%, rgba(0,0,0,0) 100%)`,
+            maskImage: useMotionTemplate`radial-gradient(250px circle at ${mouseX}px ${mouseY}px, black 0%, rgba(0,0,0,0) 100%)`
           }}
         >
           <div className="absolute top-[5vh] right-[2vw] w-full h-[85vh] md:h-[90vh] lg:h-[95vh] lg:w-[60vw] 2xl:w-[55vw]">
             <div 
               className="absolute inset-0"
               style={{
-                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%), linear-gradient(to top, transparent 0%, black 30%, black 100%)',
-                maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%), linear-gradient(to top, transparent 0%, black 30%, black 100%)',
+                WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, black 15%, black 85%, rgba(0,0,0,0) 100%), linear-gradient(to top, rgba(0,0,0,0) 0%, black 30%, black 100%)',
+                maskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, black 15%, black 85%, rgba(0,0,0,0) 100%), linear-gradient(to top, rgba(0,0,0,0) 0%, black 30%, black 100%)',
                 WebkitMaskComposite: 'source-in',
                 maskComposite: 'intersect'
               }}
@@ -111,8 +111,8 @@ export function HomeClient({
                 sizes="(max-width: 1024px) 100vw, 60vw"
               />
               
-              {/* Dark Red Color Gel: Tints the illuminated portrait area */}
-              <div className="absolute inset-0 mix-blend-color pointer-events-none bg-[rgba(153,27,27,0.9)]" />
+              {/* Dark Red Color Gel: Tints the illuminated portrait area (using multiply avoids green/cyan fringing) */}
+              <div className="absolute inset-0 mix-blend-multiply pointer-events-none bg-red-600/60" />
             </div>
           </div>
         </motion.div>

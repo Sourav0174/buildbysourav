@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 
 export function EmptyBlogState({ activeCategoryName }: { activeCategoryName?: string }) {
   return (
-    <div className="relative w-full max-w-3xl mx-auto mt-8 mb-16">
+    <div className="relative w-full max-w-3xl mx-auto">
       {/* Background glow effects */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-blue-500/10 blur-3xl opacity-50 rounded-full" />
       

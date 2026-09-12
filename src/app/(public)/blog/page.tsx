@@ -4,13 +4,14 @@ import Link from "next/link"
 import { Container } from "@/components/layout/container"
 import { Section } from "@/components/layout/section"
 import { H1, P } from "@/components/ui/typography"
-import { Button } from "@/components/ui/button"
 import { BlogCard } from "@/components/blog/blog-card"
 import { EmptyBlogState } from "@/components/blog/empty-blog-state"
 import { RefinedTerminalCTA } from "@/components/layout/refined-terminal-cta"
 import { getPublishedPosts, getCategories } from "@/core/data/blog"
 import { SITE_URL } from "@/core/utils/blog"
-import { Sparkles } from "lucide-react"
+import { Terminal } from "lucide-react"
+import { Spotlight } from "@/components/ui/spotlight"
+import { FadeIn } from "@/components/ui/fade-in"
 
 export const revalidate = 60 // ISR: Revalidate cache every 60 seconds
 
@@ -65,28 +66,35 @@ export default async function BlogIndexPage(props: {
   const regularPosts = featuredPost ? posts.slice(1) : posts
 
   return (
-    <main className="min-h-screen pt-32 selection:bg-white/20">
+    <main className="min-h-screen relative pt-16 pb-24 overflow-hidden selection:bg-white/20">
+      <Spotlight />
+      {/* Background Ambient Glow */}
+      <div 
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] pointer-events-none opacity-50"
+        style={{ background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.15) 0%, transparent 70%)' }}
+      />
+
       {/* Blog Hero Header */}
-      <header className="relative mb-12 sm:mb-16">
+      <Section className="relative z-10">
         <Container>
-          <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70 backdrop-blur-sm">
-              <Sparkles className="h-3.5 w-3.5 text-white/50" />
+          <FadeIn className="max-w-3xl mb-12">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70 backdrop-blur-sm mb-6">
+              <Terminal className="h-3.5 w-3.5 text-white/50" />
               <span>Engineering Notes & Systems Thinking</span>
             </div>
 
-            <H1 className="text-4xl md:text-5xl lg:text-6xl tracking-tight text-white/95 font-extrabold leading-tight">
+            <H1 className="text-5xl md:text-6xl tracking-tight mb-6">
               Writing on software, scale & design.
             </H1>
 
-            <P className="text-lg md:text-xl text-white/60 leading-relaxed font-light">
+            <P className="text-lg text-white/70 leading-relaxed font-light">
               Deep dives into full-stack architecture, distributed systems, resilient product design,
               and hard lessons learned from building software in production.
             </P>
-          </div>
+          </FadeIn>
 
           {/* Category Navigation Pills */}
-          <nav aria-label="Blog categories" className="mt-10 sm:mt-12">
+          <nav aria-label="Blog categories" className="mb-16">
             <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
               <Link
                 href="/blog"
@@ -131,11 +139,7 @@ export default async function BlogIndexPage(props: {
               })}
             </div>
           </nav>
-        </Container>
-      </header>
 
-      <Section className="py-8 sm:py-12 relative z-10">
-        <Container>
           {posts.length === 0 ? (
             /* Empty State */
             <EmptyBlogState activeCategoryName={activeCategory?.name} />
