@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { Navbar } from "@/components/layout/navbar"
 import { ScrollToTop } from "@/components/layout/scroll-to-top"
-import { AdSenseScript } from "@/components/ads/adsense-script"
+import { getAdProviderConfig } from "@/core/ads/config"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,10 +39,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const adConfig = getAdProviderConfig()
+
   return (
     <html lang="en" className="dark">
+      <head>
+        {adConfig.isConfigured && adConfig.provider === "adsense" && adConfig.adsense?.clientId && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adConfig.adsense.clientId}`}
+            crossOrigin="anonymous"
+          />
+        )}
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white selection:bg-white/20`}>
-        <AdSenseScript />
         <Navbar />
         {children}
         <ScrollToTop />
