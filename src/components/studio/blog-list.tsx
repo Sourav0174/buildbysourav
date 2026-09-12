@@ -560,36 +560,38 @@ export function BlogListClient({
       </div>
 
       {/* Delete Confirmation Modal */}
-      <Modal open={Boolean(postToDelete)} onOpenChange={(open) => !open && setPostToDelete(null)}>
-        <ModalContent className="max-w-md">
-          <ModalHeader>
-            <ModalTitle className="text-white text-lg">Delete Blog Post</ModalTitle>
-            <ModalDescription className="text-white/60 text-sm">
-              Are you sure you want to delete{" "}
-              <span className="text-white font-medium">&ldquo;{postToDelete?.title}&rdquo;</span>? This action
-              cannot be undone and will purge any uploaded cover assets.
-            </ModalDescription>
-          </ModalHeader>
-          <div className="flex justify-end gap-3 mt-4">
-            <Button
-              variant="outline"
-              onClick={() => setPostToDelete(null)}
-              disabled={isDeleting}
-              className="border-white/10 text-white/80 hover:bg-white/5"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleDeletePost}
-              disabled={isDeleting}
-              className="bg-red-500 hover:bg-red-600 text-white gap-2"
-            >
-              {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-              Delete Article
-            </Button>
-          </div>
-        </ModalContent>
-      </Modal>
+      {postToDelete && (
+        <Modal open={Boolean(postToDelete)} onOpenChange={(open) => !open && setPostToDelete(null)}>
+          <ModalContent className="max-w-md">
+            <ModalHeader>
+              <ModalTitle className="text-white text-lg">Delete Blog Post</ModalTitle>
+              <ModalDescription className="text-white/60 text-sm">
+                Are you sure you want to delete{" "}
+                <span className="text-white font-medium">&ldquo;{postToDelete.title}&rdquo;</span>? This action
+                cannot be undone and will purge any uploaded cover assets.
+              </ModalDescription>
+            </ModalHeader>
+            <div className="flex justify-end gap-3 mt-4">
+              <Button
+                variant="outline"
+                onClick={() => setPostToDelete(null)}
+                disabled={isDeleting}
+                className="border-white/10 text-white/80 hover:bg-white/5"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleDeletePost}
+                disabled={isDeleting}
+                className="bg-red-500 hover:bg-red-600 text-white gap-2"
+              >
+                {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                Delete Article
+              </Button>
+            </div>
+          </ModalContent>
+        </Modal>
+      )}
 
       {/* Category Manager Modal */}
       <Modal open={showCategoryModal} onOpenChange={setShowCategoryModal}>
@@ -682,38 +684,40 @@ export function BlogListClient({
       </Modal>
 
       {/* Delete Category Confirmation */}
-      <Modal open={Boolean(catToDelete)} onOpenChange={(open) => !open && setCatToDelete(null)}>
-        <ModalContent className="max-w-md">
-          <ModalHeader>
-            <ModalTitle className="text-white text-lg">Remove Category</ModalTitle>
-            <ModalDescription className="text-white/60 text-sm">
-              Are you sure you want to remove{" "}
-              <span className="text-white font-medium">&ldquo;{catToDelete?.name}&rdquo;</span>?
-              {catToDelete?._count?.posts && catToDelete._count.posts > 0 ? (
-                <span className="block mt-2 text-amber-300">
-                  Note: {catToDelete._count.posts} posts currently assigned to this category will have
-                  their category unassigned (set to null).
-                </span>
-              ) : null}
-            </ModalDescription>
-          </ModalHeader>
-          <div className="flex justify-end gap-3 mt-4">
-            <Button
-              variant="outline"
-              onClick={() => setCatToDelete(null)}
-              className="border-white/10 text-white/80 hover:bg-white/5"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleDeleteCategory}
-              className="bg-red-500 hover:bg-red-600 text-white"
-            >
-              Confirm Remove
-            </Button>
-          </div>
-        </ModalContent>
-      </Modal>
+      {catToDelete && (
+        <Modal open={Boolean(catToDelete)} onOpenChange={(open) => !open && setCatToDelete(null)}>
+          <ModalContent className="max-w-md">
+            <ModalHeader>
+              <ModalTitle className="text-white text-lg">Remove Category</ModalTitle>
+              <ModalDescription className="text-white/60 text-sm">
+                Are you sure you want to remove{" "}
+                <span className="text-white font-medium">&ldquo;{catToDelete.name}&rdquo;</span>?
+                {catToDelete._count?.posts && catToDelete._count.posts > 0 ? (
+                  <span className="block mt-2 text-amber-300">
+                    Note: {catToDelete._count.posts} posts currently assigned to this category will have
+                    their category unassigned (set to null).
+                  </span>
+                ) : null}
+              </ModalDescription>
+            </ModalHeader>
+            <div className="flex justify-end gap-3 mt-4">
+              <Button
+                variant="outline"
+                onClick={() => setCatToDelete(null)}
+                className="border-white/10 text-white/80 hover:bg-white/5"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleDeleteCategory}
+                className="bg-red-500 hover:bg-red-600 text-white"
+              >
+                Confirm Remove
+              </Button>
+            </div>
+          </ModalContent>
+        </Modal>
+      )}
     </div>
   )
 }
