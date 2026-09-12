@@ -13,7 +13,7 @@ const navItems = [
   { name: "About", path: "/about" },
 ]
 
-export function Navbar() {
+export function Navbar({ blogEnabled = true }: { blogEnabled?: boolean }) {
   const pathname = usePathname()
   const [scrolled, setScrolled] = React.useState(false)
 
@@ -24,6 +24,15 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  if (pathname?.startsWith("/studio")) {
+    return null
+  }
+
+  const items = navItems.filter(item => {
+    if (item.name === "Blog" && !blogEnabled) return false
+    return true
+  })
 
   return (
     <header
@@ -44,7 +53,7 @@ export function Navbar() {
         </Link>
         
         <div className="flex items-center gap-1 sm:gap-2">
-          {navItems.map((item) => {
+          {items.map((item) => {
             const isActive = pathname === item.path || pathname.startsWith(`${item.path}/`)
             return (
               <Link

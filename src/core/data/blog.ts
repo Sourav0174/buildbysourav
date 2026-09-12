@@ -25,6 +25,8 @@ export type BlogPostListItem = {
   } | null
 }
 
+import { unstable_cache } from 'next/cache'
+
 /**
  * Normalizes JSON tags field into a string array.
  */
@@ -48,11 +50,11 @@ export function normalizeTags(tags: unknown): string[] {
  * Strictly enforces `isPublished = true` and `publishedAt <= now`.
  * Never exposes drafts.
  */
-export async function getPublishedPosts(options?: {
+export const getPublishedPosts = unstable_cache(async (options?: {
   categorySlug?: string
   limit?: number
   offset?: number
-}) {
+}) => {
   const { categorySlug, limit, offset } = options || {}
   const now = new Date()
 
@@ -103,13 +105,13 @@ export async function getPublishedPosts(options?: {
     ...p,
     tags: normalizeTags(p.tags),
   }))
-}
+}, ['published-posts'], { revalidate: 60, tags: ['blog'] })
 
 /**
  * Fetches featured, published posts for the homepage or highlights.
  * Enforces `isPublished = true` and `isFeatured = true`.
  */
-export async function getFeaturedPosts(limit = 3) {
+export const getFeaturedPosts = unstable_cache(async (limit = 3) => {
   const now = new Date()
 
   const posts = await prisma.post.findMany({
@@ -158,7 +160,7 @@ export async function getFeaturedPosts(limit = 3) {
     ...p,
     tags: normalizeTags(p.tags),
   }))
-}
+}, ['featured-posts'], { revalidate: 60, tags: ['blog'] })
 
 /**
  * Fetches curated blog posts for the homepage.
@@ -166,7 +168,7 @@ export async function getFeaturedPosts(limit = 3) {
  * Prioritizes `isFeatured = true` posts, filling with recent published posts up to `limit`.
  * Excludes drafts and never duplicates.
  */
-export async function getHomepageBlogPosts(limit = 3) {
+export const getHomepageBlogPosts = unstable_cache(async (limit = 3) => {
   const featured = await getFeaturedPosts(limit)
   if (featured.length >= limit) {
     return featured
@@ -219,13 +221,13 @@ export async function getHomepageBlogPosts(limit = 3) {
   })
 
   return [...featured, ...recent.map(p => ({ ...p, tags: normalizeTags(p.tags) }))]
-}
+}, ['homepage-blog-posts'], { revalidate: 60, tags: ['blog'] })
 
 /**
  * Fetches a single published post by slug for public article pages.
  * Strictly guarantees drafts cannot be accessed publicly.
  */
-export async function getPostBySlug(slug: string) {
+export const getPostBySlug = unstable_cache(async (slug: string) => {
   const now = new Date()
 
   const post = await prisma.post.findFirst({
@@ -255,7 +257,7 @@ export async function getPostBySlug(slug: string) {
     ...post,
     tags: normalizeTags(post.tags),
   }
-}
+}, ['post-by-slug'], { revalidate: 60, tags: ['blog'] })
 
 /**
  * Fetches any post by ID for authenticated Studio CMS editing.
@@ -444,7 +446,7 @@ export async function getRelatedPosts(options: {
 /**
  * Fetches all categories with published post counts.
  */
-export async function getCategories() {
+export const getCategories = unstable_cache(async () => {
   const now = new Date()
 
   return prisma.category.findMany({
@@ -465,5 +467,5 @@ export async function getCategories() {
       },
     },
   })
-}
+}, ['categories'], { revalidate: 60, tags: ['blog'] })
 

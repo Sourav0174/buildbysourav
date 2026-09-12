@@ -15,6 +15,7 @@ const settingsSchema = z.object({
   email: z.string().email("Must be a valid email").or(z.literal("")).nullable().optional(),
   phone: z.string().or(z.literal("")).nullable().optional(),
   techStack: z.string().optional(), // We'll receive a stringified JSON and parse it
+  blogEnabled: z.boolean().default(true),
 })
 
 export type SettingsFormData = z.infer<typeof settingsSchema>
@@ -36,6 +37,7 @@ export async function saveSettings(data: SettingsFormData) {
     email: parsed.email || null,
     phone: parsed.phone || null,
     techStack: parsed.techStack ? JSON.parse(parsed.techStack) : [],
+    blogEnabled: parsed.blogEnabled,
   }
 
   // Find existing settings row, if any

@@ -151,7 +151,26 @@ export function SettingsEditor({ initialData }: { initialData: SettingsFormData 
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-white/10">
           <div className="space-y-6">
-            <h3 className="text-lg font-medium border-b border-white/10 pb-2">Contact Info</h3>
+            <h3 className="text-lg font-medium border-b border-white/10 pb-2">Features</h3>
+            
+            <div className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg">
+              <div>
+                <label className="text-sm font-medium text-white/80">Blog Section</label>
+                <p className="text-xs text-white/40">Enable or disable the blog feature site-wide.</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  name="blogEnabled"
+                  checked={formData.blogEnabled}
+                  onChange={(e) => handleChange({ target: { name: 'blogEnabled', value: e.target.checked } } as any)}
+                  className="sr-only peer" 
+                />
+                <div className="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-white/20"></div>
+              </label>
+            </div>
+            
+            <h3 className="text-lg font-medium border-b border-white/10 pb-2 mt-6">Contact Info</h3>
             
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium text-white/80">Email</label>

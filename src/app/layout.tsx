@@ -34,12 +34,16 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+import { prisma } from "@/core/db/prisma"
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   const adConfig = getAdProviderConfig()
+  const settings = await prisma.settings.findFirst()
+  const blogEnabled = settings?.blogEnabled ?? true
 
   return (
     <html lang="en" className="dark">
@@ -53,7 +57,7 @@ export default function RootLayout({
         )}
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white selection:bg-white/20`}>
-        <Navbar />
+        <Navbar blogEnabled={blogEnabled} />
         {children}
         <ScrollToTop />
       </body>

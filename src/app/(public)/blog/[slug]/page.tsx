@@ -44,6 +44,14 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
+  const settings = await prisma.settings.findFirst()
+  if (settings && settings.blogEnabled === false) {
+    return {
+      title: "Article Not Found | The Workspace",
+      description: "The requested article does not exist or has not been published yet.",
+    }
+  }
+
   const params = await props.params
   const post = await getPostBySlug(params.slug)
 
@@ -88,6 +96,11 @@ export async function generateMetadata(props: {
 export default async function BlogPostPage(props: {
   params: Promise<{ slug: string }>
 }) {
+  const settings = await prisma.settings.findFirst()
+  if (settings && settings.blogEnabled === false) {
+    notFound()
+  }
+
   const params = await props.params
   const post = await getPostBySlug(params.slug)
 

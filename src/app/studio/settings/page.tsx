@@ -67,7 +67,8 @@ export default async function StudioSettingsPage() {
     techStack: Array.isArray(settings.techStack) && settings.techStack.length > 0 
       ? JSON.stringify(settings.techStack, null, 2) 
       : defaultSettings.techStack,
-  } : defaultSettings
+    blogEnabled: settings.blogEnabled ?? true,
+  } : { ...defaultSettings, blogEnabled: true }
 
   return (
     <div className="space-y-8 max-w-4xl">

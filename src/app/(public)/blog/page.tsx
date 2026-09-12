@@ -6,10 +6,11 @@ import { Section } from "@/components/layout/section"
 import { H1, P } from "@/components/ui/typography"
 import { Button } from "@/components/ui/button"
 import { BlogCard } from "@/components/blog/blog-card"
+import { EmptyBlogState } from "@/components/blog/empty-blog-state"
 import { RefinedTerminalCTA } from "@/components/layout/refined-terminal-cta"
 import { getPublishedPosts, getCategories } from "@/core/data/blog"
 import { SITE_URL } from "@/core/utils/blog"
-import { BookOpen, Sparkles } from "lucide-react"
+import { Sparkles } from "lucide-react"
 
 export const revalidate = 60 // ISR: Revalidate cache every 60 seconds
 
@@ -36,9 +37,17 @@ export const metadata: Metadata = {
   },
 }
 
+import { notFound } from "next/navigation"
+import { prisma } from "@/core/db/prisma"
+
 export default async function BlogIndexPage(props: {
   searchParams?: Promise<{ category?: string }>
 }) {
+  const settings = await prisma.settings.findFirst()
+  if (settings && settings.blogEnabled === false) {
+    notFound()
+  }
+
   const searchParams = props.searchParams ? await props.searchParams : undefined
   const selectedCategorySlug = searchParams?.category
 
@@ -125,33 +134,11 @@ export default async function BlogIndexPage(props: {
         </Container>
       </header>
 
-      {/* Main Articles Listing */}
       <Section className="py-8 sm:py-12 relative z-10">
         <Container>
           {posts.length === 0 ? (
             /* Empty State */
-            <div className="py-20 text-center rounded-3xl border border-white/10 bg-white/[0.01] p-8 max-w-xl mx-auto space-y-4">
-              <div className="h-12 w-12 rounded-full bg-white/5 border border-white/10 mx-auto flex items-center justify-center">
-                <BookOpen className="h-6 w-6 text-white/40" />
-              </div>
-              <h2 className="text-xl font-semibold text-white/90">
-                {activeCategory ? `No articles in ${activeCategory.name}` : "No articles published yet"}
-              </h2>
-              <p className="text-sm text-white/50 leading-relaxed">
-                {activeCategory
-                  ? "We haven't published an article under this category yet. Check out other topics or view all articles."
-                  : "We are actively drafting high-signal engineering notes. Check back soon."}
-              </p>
-              {activeCategory && (
-                <div className="pt-2">
-                  <Link href="/blog">
-                    <Button variant="outline" size="sm" className="border-white/10 text-white/80 hover:text-white">
-                      View All Articles
-                    </Button>
-                  </Link>
-                </div>
-              )}
-            </div>
+            <EmptyBlogState activeCategoryName={activeCategory?.name} />
           ) : (
             <div className="space-y-10">
               {/* Featured Post Hero Card (Only on root All view) */}

@@ -59,6 +59,7 @@ model Settings {
   phone       String?
   techStack   Json     @default("[]")
   updatedAt   DateTime @updatedAt
+  blogEnabled Boolean  @default(true)
 }
 
 model Service {
