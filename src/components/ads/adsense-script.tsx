@@ -18,11 +18,14 @@ export function AdSenseScript() {
     return null
   }
 
+  // Defensive sanitization: ensure no leading/trailing quotes or backslashes ever reach the script src
+  const clientId = config.adsense.clientId.replace(/^["'\\]+|["'\\]+$/g, "").trim()
+
   return (
     <Script
       id="google-adsense-script"
       strategy="afterInteractive"
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${config.adsense.clientId}`}
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`}
       crossOrigin="anonymous"
     />
   )

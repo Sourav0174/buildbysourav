@@ -13,13 +13,26 @@ export interface AdProviderConfig {
 }
 
 /**
+ * Strips surrounding whitespace, quotes (single, double, or escaped), and HTML entities
+ * from environment variable values. This prevents literal quotes entered in hosting provider
+ * dashboards or env files from leaking into script URLs and HTML attributes.
+ */
+function sanitizeAdValue(value?: string): string | undefined {
+  if (!value) return undefined
+  let cleaned = value.trim()
+  cleaned = cleaned.replace(/^&quot;|&quot;$/g, "")
+  cleaned = cleaned.replace(/^["'\\]+|["'\\]+$/g, "").trim()
+  return cleaned.length > 0 ? cleaned : undefined
+}
+
+/**
  * Resolves the active Google AdSense provider configuration based on environment variables.
  * If NEXT_PUBLIC_ADSENSE_CLIENT_ID is not provided or empty, returns `{ provider: 'none', isConfigured: false }`
  * ensuring a safe no-op with zero layout shift, zero script injection, and zero network calls.
  * Never invents or hardcodes fake publisher or slot IDs.
  */
 export function getAdProviderConfig(): AdProviderConfig {
-  const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID?.trim()
+  const clientId = sanitizeAdValue(process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID)
 
   if (clientId) {
     return {
@@ -27,8 +40,8 @@ export function getAdProviderConfig(): AdProviderConfig {
       isConfigured: true,
       adsense: {
         clientId,
-        slotTop: process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP?.trim() || undefined,
-        slotBottom: process.env.NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM?.trim() || undefined,
+        slotTop: sanitizeAdValue(process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP),
+        slotBottom: sanitizeAdValue(process.env.NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM),
       },
     }
   }
